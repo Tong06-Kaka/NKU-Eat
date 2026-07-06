@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
+  <title id="title">南开校园选餐插画</title>
+  <desc id="desc">校园建筑、餐盘、路线和外卖元素组成的网页视觉素材。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#dceee7"/>
+      <stop offset="0.55" stop-color="#fff7db"/>
+      <stop offset="1" stop-color="#fde6dd"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#16352a" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="640" fill="url(#sky)"/>
+  <path d="M0 483c137-68 285-72 441-12 113 43 247 61 398 15 122-37 242-33 361 10v144H0Z" fill="#0b6b57" opacity=".14"/>
+  <path d="M0 532c170-48 320-39 450 28 123 63 253 53 390-4 119-50 239-53 360-9v93H0Z" fill="#0b6b57" opacity=".22"/>
+  <g filter="url(#shadow)">
+    <rect x="112" y="178" width="268" height="246" rx="8" fill="#fffaf0"/>
+    <path d="M92 183h308L246 88Z" fill="#0b6b57"/>
+    <rect x="149" y="235" width="42" height="57" rx="4" fill="#d34f2f"/>
+    <rect x="225" y="235" width="42" height="57" rx="4" fill="#e7b84b"/>
+    <rect x="301" y="235" width="42" height="57" rx="4" fill="#d34f2f"/>
+    <rect x="185" y="335" width="124" height="89" rx="7" fill="#0b6b57"/>
+    <path d="M185 335h124v22H185Z" fill="#064a40"/>
+  </g>
+  <g filter="url(#shadow)">
+    <ellipse cx="730" cy="360" rx="214" ry="78" fill="#fff"/>
+    <ellipse cx="730" cy="352" rx="162" ry="54" fill="#f7ead1"/>
+    <circle cx="657" cy="345" r="30" fill="#d34f2f"/>
+    <circle cx="712" cy="334" r="24" fill="#e7b84b"/>
+    <rect x="748" y="322" width="96" height="38" rx="19" fill="#0b6b57"/>
+    <path d="M581 420c62 57 222 57 298 0" fill="none" stroke="#0b6b57" stroke-width="19" stroke-linecap="round"/>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M380 406c94-42 162-45 249-16" stroke="#d34f2f" stroke-width="10" stroke-dasharray="1 28"/>
+    <path d="M873 345c68-54 111-85 205-91" stroke="#0b6b57" stroke-width="10" stroke-dasharray="1 28"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="960" y="172" width="123" height="126" rx="8" fill="#ffffff"/>
+    <path d="M986 172h71l-9-36h-53Z" fill="#d34f2f"/>
+    <path d="M986 172h71" stroke="#9d321e" stroke-width="8"/>
+    <circle cx="990" cy="315" r="19" fill="#064a40"/>
+    <circle cx="1060" cy="315" r="19" fill="#064a40"/>
+    <path d="M941 270h161" stroke="#0b6b57" stroke-width="16" stroke-linecap="round"/>
+  </g>
+  <g fill="#17211b" opacity=".72">
+    <circle cx="485" cy="194" r="7"/>
+    <circle cx="524" cy="167" r="5"/>
+    <circle cx="898" cy="152" r="6"/>
+    <circle cx="922" cy="208" r="4"/>
+  </g>
+</svg>

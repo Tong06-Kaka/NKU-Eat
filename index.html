@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>今天南开吃什么</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="onboarding" id="onboarding" hidden>
+      <section class="login-card" aria-labelledby="loginTitle">
+        <div class="avatar-preview" id="avatarPreview">南</div>
+        <div>
+          <div class="section-kicker">第一次见面</div>
+          <h1 id="loginTitle">先给你的饭点档案起个名</h1>
+          <p class="intro">昵称和头像只保存在当前浏览器，用来让推荐结果更有个人感。</p>
+        </div>
+        <label>
+          昵称
+          <input id="nicknameInput" maxlength="16" placeholder="例如：南开干饭研究员" />
+        </label>
+        <div class="avatar-grid" id="avatarGrid" aria-label="头像选择"></div>
+        <div class="action-row">
+          <button class="secondary-action" type="button" id="aiProfileBtn">AI 给我想一个</button>
+          <button class="primary-action" type="button" id="enterBtn">进入网站</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#recommend">
+          <span class="brand-mark" aria-hidden="true">NK</span>
+          <span>
+            <strong>今天南开吃什么</strong>
+            <small id="userGreeting">30 秒选餐助手</small>
+          </span>
+        </a>
+        <nav class="nav-links" aria-label="页面导航">
+          <a href="#recommend">推荐</a>
+          <a href="#library">菜单</a>
+          <a href="#profile">档案</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="decision-section" id="recommend">
+          <div class="decision-panel">
+            <div class="section-kicker">饭点到了</div>
+            <h1>别纠结了，今天就吃这个。</h1>
+            <p class="intro">
+              按校区、组团、食堂/店铺、预算和口味筛选。食堂项使用“排队压力”，外卖项使用“配送时间”，避免把两类选择硬凑成一个指标。
+            </p>
+
+            <form class="filters" id="filters">
+              <fieldset>
+                <legend>选择类型</legend>
+                <div class="segmented" data-filter="source">
+                  <button type="button" class="active" data-value="all">都可以</button>
+                  <button type="button" data-value="canteen">食堂</button>
+                  <button type="button" data-value="store">校内商业</button>
+                  <button type="button" data-value="delivery">外卖</button>
+                </div>
+              </fieldset>
+
+              <div class="form-grid">
+                <label>
+                  校区
+                  <select id="campus"></select>
+                </label>
+                <label>
+                  组团 / 区域
+                  <select id="area"></select>
+                </label>
+                <label>
+                  食堂 / 店铺
+                  <select id="place"></select>
+                </label>
+                <label>
+                  预算
+                  <select id="budget">
+                    <option value="999">不限</option>
+                    <option value="12">12 元以内</option>
+                    <option value="18" selected>18 元以内</option>
+                    <option value="25">25 元以内</option>
+                    <option value="35">35 元以内</option>
+                  </select>
+                </label>
+                <label>
+                  可接受等待
+                  <select id="effort">
+                    <option value="1">尽量快</option>
+                    <option value="2" selected>正常饭点可接受</option>
+                    <option value="3">排队/配送久一点也行</option>
+                  </select>
+                </label>
+                <label>
+                  当前状态
+                  <select id="mood">
+                    <option value="饱腹" selected>想吃饱</option>
+                    <option value="清淡">想清淡</option>
+                    <option value="高蛋白">想高蛋白</option>
+                    <option value="换口味">想换口味</option>
+                    <option value="安慰">需要安慰餐</option>
+                  </select>
+                </label>
+              </div>
+
+              <fieldset>
+                <legend>口味偏好</legend>
+                <div class="chips" id="tasteChips">
+                  <button type="button" data-value="米饭">米饭</button>
+                  <button type="button" data-value="面食">面食</button>
+                  <button type="button" data-value="辣">辣</button>
+                  <button type="button" data-value="不辣">不辣</button>
+                  <button type="button" data-value="清淡">清淡</button>
+                  <button type="button" data-value="小吃">小吃</button>
+                  <button type="button" data-value="甜口">甜口</button>
+                  <button type="button" data-value="咖啡">咖啡</button>
+                </div>
+              </fieldset>
+
+              <div class="action-row">
+                <button class="primary-action" type="submit">帮我决定</button>
+                <button class="icon-action" type="button" id="randomBtn" aria-label="随机换一个" title="随机换一个">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M16 3h5v5M4 20l6.6-6.6M20 4l-7 7M4 4l16 16M16 21h5v-5" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <aside class="result-panel" aria-live="polite">
+            <img class="food-visual" src="assets/nankai-food-map.svg" alt="南开校园选餐插画" />
+            <div class="result-header">
+              <span id="resultMode">当前推荐</span>
+              <button class="ghost-button" type="button" id="saveBtn">收藏</button>
+            </div>
+            <article class="hero-card" id="mainResult"></article>
+            <div class="mini-results" id="backupResults"></div>
+          </aside>
+        </section>
+
+        <section class="notice-band">
+          <strong>数据说明</strong>
+          <span>当前菜单是用于验证推荐流程的示例数据，不是正式采集结果。真实上线需要你继续补充每个食堂、楼层、窗口、菜品、价格和供应时段。</span>
+        </section>
+
+        <section class="library-section" id="library">
+          <div class="section-heading">
+            <div>
+              <div class="section-kicker">校园菜单框架</div>
+              <h2>先把南开的吃饭地图搭起来</h2>
+            </div>
+            <label class="search-box">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m21 21-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
+              </svg>
+              <input id="searchInput" type="search" placeholder="搜索菜名、食堂、窗口、区域" />
+            </label>
+          </div>
+          <div class="tabs" id="libraryTabs">
+            <button class="active" type="button" data-tab="all">全部</button>
+            <button type="button" data-tab="canteen">食堂</button>
+            <button type="button" data-tab="store">校内商业</button>
+            <button type="button" data-tab="delivery">外卖</button>
+            <button type="button" data-tab="favorite">收藏</button>
+          </div>
+          <div class="campus-map" id="campusMap"></div>
+          <div class="food-grid" id="foodGrid"></div>
+        </section>
+
+        <section class="profile-section" id="profile">
+          <div class="preference-card">
+            <div class="profile-line">
+              <span class="small-avatar" id="profileAvatar">南</span>
+              <div>
+                <div class="section-kicker">个人档案</div>
+                <h2 id="profileName">南开同学</h2>
+                <p>收藏、推荐历史和个人档案都保存在当前浏览器。后续可以扩展为账号系统、评分、同学投稿和后台菜单维护。</p>
+              </div>
+            </div>
+            <div class="stats">
+              <div>
+                <strong id="favoriteCount">0</strong>
+                <span>已收藏</span>
+              </div>
+              <div>
+                <strong id="historyCount">0</strong>
+                <span>推荐历史</span>
+              </div>
+            </div>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="decision-dialog" id="decisionDialog">
+      <button class="dialog-close" type="button" id="closeDialog" aria-label="关闭推荐弹窗">×</button>
+      <div class="section-kicker">已经替你决定</div>
+      <div id="dialogContent"></div>
+      <div class="dialog-actions">
+        <button class="secondary-action" type="button" id="dialogShuffle">再换一个</button>
+        <button class="primary-action" type="button" id="dialogOk">就吃这个</button>
+      </div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
