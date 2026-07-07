@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>今天南开吃什么</title>
-    <link rel="stylesheet" href="styles.css?v=20260707a" />
+    <link rel="stylesheet" href="styles.css?v=20260707c" />
   </head>
   <body>
     <div class="onboarding" id="onboarding" hidden>
@@ -39,6 +39,7 @@
         </a>
         <nav class="nav-links" aria-label="页面导航">
           <a href="#recommend">推荐</a>
+          <a href="#wheel">转盘</a>
           <a href="#library">菜单</a>
           <a href="#profile">档案</a>
         </nav>
@@ -52,6 +53,25 @@
             <p class="intro">
               先选校区、组团和食堂/店铺，再用种类、口味和需求标签缩小范围。推荐会先告诉你去哪家，再给出这家的可选菜品。
             </p>
+            <div class="campus-scene" aria-hidden="true">
+              <div class="nankai-seal">
+                <span>NKU</span>
+                <small>1919</small>
+              </div>
+              <div class="campus-skyline">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="hungry-guide">
+                <span class="guide-bubble">饿呀</span>
+                <span class="guide-face">
+                  <i></i>
+                  <i></i>
+                  <b></b>
+                </span>
+              </div>
+            </div>
 
             <form class="filters" id="filters">
               <fieldset>
@@ -141,6 +161,30 @@
           </aside>
         </section>
 
+        <section class="wheel-section" id="wheel">
+          <div class="wheel-copy">
+            <div class="section-kicker">随机大转盘</div>
+            <h2>只选校区，让商家自己转出来</h2>
+            <p class="intro">转盘只抽商家和窗口，不抽具体菜品。想继续纠结也可以多转几次。</p>
+            <div class="wheel-controls">
+              <label>
+                校区
+                <select id="wheelCampus"></select>
+              </label>
+              <button class="primary-action" type="button" id="spinWheelBtn">开始转</button>
+              <span id="wheelPoolCount">0 家可选</span>
+            </div>
+          </div>
+          <div class="wheel-stage">
+            <div class="wheel-pointer" aria-hidden="true"></div>
+            <div class="wheel-disc" id="wheelDisc">
+              <div class="wheel-labels" id="wheelLabels"></div>
+              <div class="wheel-center">NKU</div>
+            </div>
+          </div>
+          <article class="wheel-result" id="wheelResult" aria-live="polite"></article>
+        </section>
+
         <section class="notice-band">
           <strong>数据说明</strong>
           <span>当前菜单用于验证推荐流程。真实上线时继续补充每个食堂、店铺、窗口和菜品即可。</span>
@@ -209,6 +253,6 @@
       </div>
     </dialog>
 
-    <script src="app.js?v=20260707a"></script>
+    <script src="app.js?v=20260707c"></script>
   </body>
 </html>

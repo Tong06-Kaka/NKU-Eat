@@ -8,16 +8,12 @@ const structure = {
     理科组团: [
       "魔都三兄弟",
       "兰州拉面",
-      "肯律轻食",
+      "肯德基（肯律轻食）",
       "711便利店快餐",
       "原汁味｜美食广场",
-      "理科食堂",
-      "KFC",
-      "瑞幸咖啡",
-      "711便利店",
-      "独立店铺"
+      "理科食堂"
     ],
-    文科组团: ["芸锦拉面", "福莲餐厅", "朴大叔拌饭", "橘南小巷", "肯德基", "清真餐厅", "文科食堂", "元和西饼", "蜜雪冰城"],
+    文科组团: ["芸锦拉面", "福莲餐厅", "朴大叔拌饭", "橘南小巷-招牌红焖羊肉火锅·秘制烤鱼", "肯德基", "清真餐厅", "文科食堂"],
     校外外卖: ["津南周边"]
   }
 };
@@ -29,7 +25,7 @@ const balitaiSeedFoods = [
     area: "校内食堂",
     place: "一食堂 1F",
     window: "待补充窗口",
-    name: "一食堂家常盖饭",
+    name: "一食堂现场菜单自选",
     rating: 4.1,
     reason: "八里台条目已保留，适合到对应食堂后看现场窗口。"
   }),
@@ -39,7 +35,7 @@ const balitaiSeedFoods = [
     area: "校内商业",
     place: "90咖啡馆",
     window: "简餐/饮品",
-    name: "90咖啡馆简餐",
+    name: "90咖啡馆饮品简餐",
     rating: 4.1,
     reason: "适合想在校内商业点买饮品、轻食或简餐。"
   }),
@@ -62,10 +58,13 @@ const menuGroups = [
   group("store", "兰州拉面", "炒面类", "鸡蛋炒拉面、牛肉炒拉面、牛肉炒刀削面、牛肉炒面片、牛肉干拌面、牛肉炸酱面、牛肉泡馍、羊肉泡馍、新疆拌面"),
   group("store", "兰州拉面", "盖面类", "土豆烧牛肉盖面、蘑菇炒牛肉盖面、蒜蓉炒牛肉盖面、木耳炒牛肉盖面、洋葱炒牛肉盖面、西葫芦牛肉盖面、红烧牛肉盖面、红烧鸡块盖面、葱爆牛肉盖面、葱爆羊肉盖面、孜然羊肉盖面、孜然牛肉盖面、酸辣白菜盖面、青椒土豆丝盖面、番茄炒蛋盖面、大盘鸡盖面"),
   group("store", "兰州拉面", "盖饭类", "土豆烧牛肉盖饭、蘑菇炒牛肉盖饭、蒜蓉炒牛肉盖饭、青椒炒牛肉盖饭、木耳炒牛肉盖饭、洋葱炒牛肉盖饭、西葫芦牛肉盖饭、红烧牛肉盖浇饭、红烧鸡块盖饭、葱爆牛肉盖饭、葱爆羊肉盖饭、孜然羊肉盖饭、孜然牛肉盖饭、酸辣白菜盖饭、青椒土豆丝盖饭、番茄炒蛋盖饭、大盘鸡盖饭"),
-  group("store", "兰州拉面", "炒饭/凉拌/特色/汤", "蛋炒饭、牛肉炒饭、兰州炒饭、凉拌土豆丝、凉拌西红柿、凉拌黄瓜、凉拌三丝、红烧牛肉、红烧羊肉、葱爆牛肉、葱爆羊肉、孜然牛肉、孜然羊肉、青椒牛肉、番茄炒蛋、青椒土豆丝、红烧鸡块、新疆大盘鸡、水煮炒牛肉、西葫芦炒牛肉、红烧茄子、牛肉清汤、西红柿鸡蛋汤"),
-  group("store", "肯律轻食", "轻食", "肯律轻食待补充菜单"),
-  group("store", "711便利店快餐", "便利店快餐", "711便利店快餐待补充菜单"),
-  group("store", "原汁味｜美食广场", "美食广场", "原汁味美食广场待补充菜单"),
+  group("store", "兰州拉面", "炒饭类", "蛋炒饭、牛肉炒饭、兰州炒饭"),
+  group("store", "兰州拉面", "凉拌类", "凉拌土豆丝、凉拌西红柿、凉拌黄瓜、凉拌三丝、青椒炒牛肉、蘑菇炒牛肉"),
+  group("store", "兰州拉面", "特色菜", "红烧牛肉、红烧羊肉、葱爆牛肉、葱爆羊肉、孜然牛肉、孜然羊肉、青椒牛肉、番茄炒蛋、青椒土豆丝、红烧鸡块、新疆大盘鸡、水煮炒牛肉、西葫芦炒牛肉、红烧茄子"),
+  group("store", "兰州拉面", "汤类", "牛肉清汤、西红柿鸡蛋汤"),
+  group("store", "肯德基（肯律轻食）", "独立经营店", "到店自选"),
+  group("store", "711便利店快餐", "便利店快餐", "到店自选"),
+  group("store", "原汁味｜美食广场", "美食广场", "到店自选"),
 
   group("canteen", "理科食堂 1F", "山东杂粮煎饼", "脆饼鸡蛋煎饼、鸡肉肠、肉松、玉米粒、海带丝、土豆丝、里脊肉、鸡柳、烤肠"),
   group("canteen", "理科食堂 1F", "隆江猪肘饭", "隆江猪肘饭"),
@@ -75,35 +74,41 @@ const menuGroups = [
   group("canteen", "理科食堂 1F", "千里香手工现包馄饨福鼎肉片", "飘香拌面、青菜面、猪肉大葱水饺、猪肉白菜水饺、馄饨加拌面、芝麻汤圆、玉米排骨汤、茶树菇鸡块汤、山药排骨汤、福鼎肉片、鲜肉馄饨、虾仁馄饨、玉米馄饨、香菇馄饨、全家福馄饨、鸡汤面"),
   group("canteen", "理科食堂 1F", "铁板炒饭", "蛋炒饭、扬州炒饭、酸菜蛋炒饭、鸡蛋火腿炒饭、榨菜肉丝炒饭、鱼豆腐蛋炒饭、青椒肉丝炒饭、玉米鸡丁炒饭、香菇酱蛋炒饭、广式腊肠炒饭、培根蛋炒饭、里脊肉炒饭、五花肉炒饭、牛肉炒饭、鲜肉包、茶叶蛋、蒸饺、黑米粥、小米南瓜粥、牛奶燕麦粥、皮蛋瘦肉粥"),
   group("canteen", "理科食堂 1F", "炖炖湘", "辣椒炒肉、辣子鸡、蟹黄豆腐、湘式椒麻鸡、外婆菜炒鸡蛋、解馋回锅肉、招牌绝味鸡拌饭、可乐鸡翅拌饭、超级卤肉拌饭、荔枝鸡排饭、法式黑椒鸡拌饭、糖醋排骨拌饭、香甜烧鸡拌饭、椒麻手撕鸡拌饭、任意双拼套餐"),
-  group("canteen", "理科食堂 1F", "刘二怪山西刀削面", "特色油泼面、素臊子油泼面、西红柿鸡蛋油泼面、鸡块油泼面、鸡丝油泼面、剁椒油泼面、肉臊子油泼面、二合一油泼面、三合一油泼面、酸豆角肉沫拌面、肉臊子拌面、麻酱拌面、烤肉酱拌面、招牌酱拌面、手撕鸡拌面、藤椒鸡拌面、香菇肉酱拌面、金汤酸菜鸡丝面、番茄肥牛面、小酥肉面、肥牛面、粗粮番茄渔粉、粗粮麻辣渔粉、金汤肥牛粉、酸汤肥牛粉"),
+  group("canteen", "理科食堂 1F", "刘二怪（山西刀削面）", "特色油泼面、素臊子油泼面、西红柿鸡蛋油泼面、鸡块油泼面、鸡丝油泼面、剁椒油泼面、肉臊子油泼面、二合一油泼面、三合一油泼面、酸豆角肉沫拌面、肉臊子拌面、麻酱拌面、烤肉酱拌面、招牌酱拌面、手撕鸡拌面、鸡块拌面、藤椒鸡拌面、香菇肉酱拌面、西红柿鸡蛋面、金汤酸菜鸡丝面、肉沫臊子面、番茄肥牛面、小酥肉面、鱼豆腐面、肥牛面、方便面+鸡蛋、粗粮金针菇粉、香辣鱼豆腐粉、粗粮番茄渔粉、粗粮麻辣渔粉、粗粮椒麻渔粉、粗粮金汤渔粉、番茄小酥肉粉、椒麻小酥肉粉、金汤肥牛粉、番茄肥牛粉、酸汤肥牛粉"),
   group("canteen", "理科食堂 1F", "麦多馅饼", "照烧鸡肉馅饼、黑椒酱肉馅饼、蜜汁鸡肉馅饼、香辣鸡肉馅饼、麻辣鸡肉馅饼、青椒猪肉馅饼、鸡汁海带、香辣土豆、麻婆豆腐、鱼香茄子、秘制红豆、红枣豆浆、黑芝麻豆浆"),
   group("canteen", "理科食堂 1F", "苗香掉渣饼", "原味掉渣饼、香肠、海带丝、培根、川香鸡柳、里脊肉片、肉松、火腿片、虎皮青椒、炸土豆条"),
-  group("canteen", "理科食堂 1F", "朝阳洲牛肉粉面", "蟹黄肉酱拌面/粉、现炖黄牛肉汤面/粉、招牌肉酱拌面/粉、酸豆角肉沫面/粉、湘味辣子鸡面/粉、酸汤牛肉面/粉、老坛酸菜面/粉、白切牛肉汤面/粉、番茄牛肉汤面/粉、湘味炒肉汤面/粉、番茄肉酱拌面/粉、甜辣炸鸡拌面/粉、葱油拌面、南昌拌粉、冒烤鸭干拌粉、椒麻鸡丝拌面/粉、炸蛋、烤饼、兰花串、淀粉肠、大肉肠、黑椒鸡扒"),
-  group("canteen", "理科食堂 1F", "其他窗口", "炙烤五花肉、米桥里鲜烫牛肉米线、自选菜"),
+  group("canteen", "理科食堂 1F", "朝阳洲·牛肉粉面", "蟹黄肉酱拌面/粉、现炖黄牛肉汤面/粉、招牌肉酱拌面/粉、酸豆角肉沫面/粉、湘味辣子鸡面/粉、酸汤牛肉面/粉、老坛酸菜面/粉、白切牛肉汤面/粉、番茄牛肉汤面/粉、湘味炒肉汤面/粉、湘味辣子鸡汤面/粉、番茄肉酱拌面/粉、甜辣炸鸡拌面/粉、葱油拌面、南昌拌粉、冒烤鸭干拌粉、椒麻鸡丝拌面/粉、湘味肉炒肉拌面/粉、炸蛋、烤饼、兰花串、淀粉肠、大肉肠、黑椒鸡扒"),
+  group("canteen", "理科食堂 1F", "炙烤五花肉（炉香小炙）", "炙烤五花肉"),
+  group("canteen", "理科食堂 1F", "米桥里鲜烫牛肉米线", "米桥里鲜烫牛肉米线"),
+  group("canteen", "理科食堂 1F", "自选菜", "自选菜"),
 
   group("canteen", "理科食堂 2F", "张翼德云饺", "猪肉大葱手工水饺、猪肉白菜手工水饺、猪肉茴香手工水饺、猪肉芹菜手工水饺、猪肉酸菜手工水饺、猪肉香菇手工水饺、肉三鲜手工水饺、全家福手工水饺、鲜肉大馄饨、玉米鲜肉大馄饨、马蹄鲜肉大馄饨、皮蛋鲜肉大馄饨、虾仁鲜肉大馄饨、蟹籽鲜肉大馄饨、蟹籽虾仁鲜肉大馄饨、全家福大馄饨、招牌鲜汤、干捞水饺、红油干拌、麻酱干拌、红油麻酱干拌、鲜虾蟹籽馄饨"),
-  group("canteen", "理科食堂 2F", "小渝府", "招牌香豌杂面、干溜肉酱面、干溜鸡杂面、宜宾燃面、干溜小面、干溜三鲜面、干溜担担面、鸡丝拌面、香豌燃豆面、干溜牛肉面、飘香拌面、麻辣小面、清汤小面、浓汤豌杂面、霸道牛肉面、老坛酸菜面、浓汤三鲜面、泡椒鸡杂面、浓汤肉臊面、酸菜肉丝面、担担面、麻辣米线、肉酱米线、肉酱拌米线、浓汤酸辣粉、霸道牛肉酸辣粉、酸菜肉丝酸辣粉、鸡杂酸辣粉、老麻抄手、浓汤抄手、干溜抄手、藤椒抄手、红油抄手、小油菜、肉丸、煎蛋、肥肠、虎皮鸡蛋、卤鸡腿"),
+  group("canteen", "理科食堂 2F", "小渝府", "招牌香豌杂面、干溜肉酱面、干溜鸡杂面、宜宾燃面、干溜小面、干溜三鲜面、干溜担担面、鸡丝拌面、香豌燃豆面、干溜牛肉面、飘香拌面、麻辣小面、清汤小面、浓汤豌杂面、霸道牛肉面、老坛酸菜面、浓汤三鲜面、泡椒鸡杂面、浓汤肉臊面、浓汤豌豆面、酸菜肉丝面、担担面、麻辣米线、肉酱米线、肉酱拌米线、香豌豌杂拌米线、浓汤米线、酸菜肉丝米线、香豌豌豆米线、霸道牛肉米线、浓汤三鲜米线、泡椒鸡杂米线、香豌豌杂米线、浓汤酸辣粉、霸道牛肉酸辣粉、酸菜肉丝酸辣粉、肉酱酸辣粉、鸡杂酸辣粉、老麻抄手、浓汤抄手、干溜抄手、藤椒抄手、红油抄手、小油菜、肉丸、煎蛋、肥肠、泡椒鸡杂、虎皮鸡蛋、肉酱、卤鸡腿、霸道牛肉"),
   group("canteen", "理科食堂 2F", "热汁米皮｜火锅面", "肉夹馍、牛筋面、热汁米皮、鸡丝米皮、臊子米皮、牛肉米皮、鸡丝牛筋面、臊子牛筋面、火锅素面、火锅鸡面、火锅鱼丸面、火锅牛肉面、火锅排骨面"),
   group("canteen", "理科食堂 2F", "特色安徽板面｜陕西风味面", "牛肉板面、板面+鸡蛋、板面+香肠、板面+狮子头、板面+千叶豆腐、板面套餐全加、辣子刀削面、牛肉刀削面、红烧鸡刀削面、麻辣刀削面、蔬菜刀削面、西红柿刀削面、芥麦面、红烧排骨面、鸡丝拌面、牛肉拌面、西红柿鸡蛋面、麻辣拌面、鸡丝凉面、陕西臊子面"),
   group("canteen", "理科食堂 2F", "云南生烫牛肉米线", "招牌肉酱米线、番茄肉酱米线、麻辣肉酱米线、孜然肉酱米线、生烫牛肉米线"),
-  group("canteen", "理科食堂 2F", "青螺馆螺蛳粉", "招牌螺蛳粉、炸蛋螺蛳粉、经典套餐、营养套餐"),
-  group("canteen", "理科食堂 2F", "精品套餐", "自选烤盘饭、酱卤猪肉饭、酱烧鸭腿饭、酱脊骨饭、农家蒸肉饭、农家小炒鸡饭、酱卤猪脆骨饭、烤鸡腿饭、锅包肉、溜肉段、酸菜五花肉"),
+  group("canteen", "理科食堂 2F", "青螺馆螺蛳粉", "招牌螺蛳粉、炸蛋螺蛳粉、经典套餐（卤蛋+油条）、营养套餐（卤蛋+兰花干+淀粉肠）"),
+  group("canteen", "理科食堂 2F", "自选烤盘饭", "自选烤盘饭"),
+  group("canteen", "理科食堂 2F", "精品套餐", "酱卤猪肉饭、酱烧鸭腿饭、酱脊骨饭、农家蒸肉饭、农家小炒鸡饭、酱卤猪脆骨饭、烤鸡腿饭、锅包肉、溜肉段、酸菜五花肉"),
   group("canteen", "理科食堂 2F", "辣椒炒肉窗口", "湖南辣椒炒肉、焦糖鸡、柠檬手撕鸡、可乐鸡腿饭、重庆辣子鸡、蜜汁土豆鸡、馋娃酱肉饭、临沂小炒鸡、新疆风味爆肉"),
   group("canteen", "理科食堂 2F", "广式烧腊窗口", "广式烤鸭饭、广式叉烧肉、广式猪肘饭、广式豉汁蒸排骨、广式双拼饭、广式蜜汁烤鸡、广式照烧鸡、广式蜜汁鸡排、广式脆皮五花肉、广式潮汕肉卷"),
-  group("canteen", "理科食堂 2F", "热汁卤肉饭窗口", "招牌卤肉饭、卤汁肘花饭、卤汁鸡腿饭、卤汁鸭腿饭、卤汁肉肠饭、椒麻手撕鸡肉饭、椒麻手撕鸭肉饭、卤鸡肉饭双拼、椒麻腐竹饭、麻面筋饭、卤汁豆干饭、椒麻土豆片饭、卤汁鸡排饭、卤汁牛肉饭、椒麻五花肉饭、卤五花肉饭双拼"),
+  group("canteen", "理科食堂 2F", "热汁卤肉饭窗口", "招牌卤肉饭、卤汁肘花饭、卤汁鸡腿饭、卤汁鸭腿饭、卤汁肉肠饭、椒麻手撕鸡肉饭、椒麻手撕鸭肉饭、卤鸡肉饭双拼、椒麻腐竹饭、椒麻面筋饭、卤汁豆干饭、椒麻土豆片饭、卤汁鸡排饭、卤汁牛肉饭、椒麻五花肉饭、卤五花肉饭双拼"),
   group("canteen", "理科食堂 2F", "香酥鸡米饭窗口", "卤汁香酥鸡米饭、原味香酥鸡米饭、番茄香酥鸡米饭、香辣香酥鸡米饭、千岛香酥鸡米饭、沙拉香酥鸡米饭、卤味鸡腿饭、蜜汁排骨饭、藤椒滑鸡饭、香菇滑鸡饭、骨肉相连饭、孜然煎肉饭"),
   group("canteen", "理科食堂 2F", "缘味先石锅饭窗口", "石锅千叶豆腐、石锅小酥肉、石锅小鲜肉、石锅鸡、石锅孜然肉、石锅肥牛、石锅红烧肉、石锅鸡蛋、石锅豆腐、石锅土豆、石锅焖面、石锅培根金针菇、石锅地三鲜、石锅排骨、石锅鸡蛋+土豆、石锅鸡蛋+千叶豆腐、石锅鸡蛋+豆腐、石锅鸡蛋+小酥肉、石锅鸡蛋+小鲜肉、石锅鸡蛋+鸡块、石锅鸡蛋+腊肠、石锅鸡蛋+培根、石锅鸡蛋+肥牛、石锅豆腐+鸡块、石锅焖面+小酥肉、石锅焖面+小鲜肉、石锅焖面+鸡块"),
-  group("canteen", "理科食堂 2F", "其他窗口", "百味炒饭、鲁佬爷油泼鸡、经济快餐窗口、自选菜"),
+  group("canteen", "理科食堂 2F", "百味炒饭", "百味炒饭"),
+  group("canteen", "理科食堂 2F", "鲁佬爷油泼鸡", "鲁佬爷油泼鸡"),
+  group("canteen", "理科食堂 2F", "经济快餐窗口", "经济快餐窗口"),
+  group("canteen", "理科食堂 2F", "自选菜", "自选菜"),
 
   group("canteen", "理科食堂 3F", "干锅系列窗口", "干锅五花肉、干锅笋丝、酱香炒鸡、香辣炒鸡"),
   group("canteen", "理科食堂 3F", "重庆小面窗口", "抄手、酱牛肉面/粉、虫草花鸡肉面、肥肠杂面、臊子面/粉、排骨面/粉、牛肉大葱水饺、猪肉白菜水饺、猪肉大葱水饺、猪肉三鲜水饺、半鸡米线/粉、卤肉面/粉"),
   group("canteen", "理科食堂 3F", "自选菜", "自选菜"),
 
-  group("store", "芸锦拉面", "独立经营店", "芸锦拉面待补充菜单", "文科组团"),
-  group("store", "福莲餐厅", "独立经营店", "福莲餐厅待补充菜单", "文科组团"),
-  group("store", "朴大叔拌饭", "独立经营店", "朴大叔拌饭待补充菜单", "文科组团"),
-  group("store", "橘南小巷", "招牌红焖羊肉火锅·秘制烤鱼", "红焖羊肉火锅、秘制烤鱼", "文科组团"),
-  group("store", "肯德基", "独立经营店", "肯德基待补充菜单", "文科组团"),
+  group("store", "芸锦拉面", "独立经营店", "到店自选", "文科组团"),
+  group("store", "福莲餐厅", "独立经营店", "到店自选", "文科组团"),
+  group("store", "朴大叔拌饭", "独立经营店", "到店自选", "文科组团"),
+  group("store", "橘南小巷-招牌红焖羊肉火锅·秘制烤鱼", "独立经营店", "红焖羊肉火锅、秘制烤鱼", "文科组团"),
+  group("store", "肯德基", "独立经营店", "到店自选", "文科组团"),
 
   group("canteen", "清真餐厅", "早餐类", "小米粥、紫米粥、南瓜粥、白米粥、原味豆浆、煮鸡蛋、素包子、豆沙饼、小菜、馅饼", "文科组团"),
   group("canteen", "清真餐厅", "中式炸鸡", "鸡翅、翅中、翅根、香骨鸡、鸡肉条、鸡叉骨、地瓜条、烤奶酪", "文科组团"),
@@ -119,15 +124,15 @@ const menuGroups = [
   group("canteen", "文科食堂 1F", "螺簸箕", "经典螺蛳粉、港味螺蛳粉、番茄螺蛳粉、鸡汤螺蛳粉、麻酱螺蛳粉、干捞螺蛳粉、南昌拌粉、木耳丝、酸豆角、生菜、花生、腐竹、现炸大炸蛋、网红响铃卷、无骨鸡柳、网红炸香肠、小酥肉、鸡米花", "文科组团"),
   group("canteen", "文科食堂 1F", "山西饼", "大饼、鸡蛋饼、川香鸡柳、火腿片、烤肠、奥尔良腿排、烧饼里脊、面筋串、黑椒鸡排、培根、土豆丝、海带丝、油酥饼、牛肉粉丝饼、猪肉大葱馅饼、青椒饼、土豆饼、豆沙馅饼、白糖馅饼、酱香饼、浓香原味黄豆豆浆、浓香黑芝麻豆浆、现磨红枣豆浆、现磨花生豆浆、现磨黑米红枣豆浆", "文科组团"),
   group("canteen", "文科食堂 1F", "杂粮煎饼&粥铺窗口", "火鸡面、燃面、鲜椒面、酸豆角拌面、圆白菜、火腿片、川香鸡柳、脆皮肠、海带、培根、肉松、奥尔良脆骨肠、小米南瓜粥、牛奶燕麦粥、紫米红枣粥、红糖黑米粥、红枣养生黑米粥、红豆养生粥、皮蛋瘦肉粥、酸辣汤、疙瘩汤、豆腐脑", "文科组团"),
-  group("canteen", "文科食堂 1F", "小街特色面窗口", "麻酱拌面、麻辣拌面、老北京肉沫炸酱面、番茄鸡蛋面、油泼面、小街燃面、小街火鸡面、鲜椒拌面、肉沫酸豆角面、小街火鸡拌面、麻酱鸡丝拌面、小街特色汤面、鸡蛋汤面、卤肉汤面、牛肉汤面、鸡腿汤面、辣肉汤面、鸡丝汤面", "文科组团"),
+  group("canteen", "文科食堂 1F", "小街特色面窗口", "麻酱拌面、麻辣拌面、老北京肉沫炸酱面、番茄鸡蛋面、油泼面、小街燃面、小街火鸡面、鲜椒拌面、肉沫酸豆角面、小街火鸡拌面、小街燃面、麻酱鸡丝拌面、小街特色汤面、鸡蛋汤面、卤肉汤面、牛肉汤面、鸡腿汤面、辣肉汤面、鸡丝汤面", "文科组团"),
   group("canteen", "文科食堂 1F", "自选菜", "自选菜", "文科组团"),
 
   group("canteen", "文科食堂 2F", "悦轻荷自选轻食", "照烧鸡腿谷物饭、烟熏鸡腿谷物饭、蒜香鸡腿谷物饭、黑椒鸡腿谷物饭、橄榄鸡块谷物饭、柠檬鸡块谷物饭、金枪鱼谷物饭", "文科组团"),
   group("canteen", "文科食堂 2F", "茶泡饭窗口", "黑椒脆香鸡茶泡饭、沙拉脆香鸡茶泡饭、蜜汁脆香鸡茶泡饭、孜然脆香鸡茶泡饭、柠檬脆香鸡茶泡饭、番茄脆香鸡茶泡饭、香辣脆香鸡茶泡饭、原味脆香鸡茶泡饭、时蔬茶泡饭、菌菇茶泡饭、香辣鸭骨茶泡饭、千叶豆腐茶泡饭", "文科组团"),
   group("canteen", "文科食堂 2F", "烤盘饭", "烤盘饭", "文科组团"),
   group("canteen", "文科食堂 2F", "海南鸡饭窗口", "椒麻鸡饭、照烧鸡饭、奥尔良烧肉饭、鸡排豆腐饭、烧鸭饭、烧鸡饭、泰式豆腐饭、口水鸡饭、白斩鸡饭、柠檬鸡饭、沙拉鸡饭、金牌烧肉饭", "文科组团"),
-  group("canteen", "文科食堂 2F", "捞香婆香汁拌饭", "回味鸭腿饭、啫啫鸡腿饭、金牌肘子饭、糖醋烧肉饭、蜜汁烤肉饭、川香鸡鸡饭、火爆鸡丁饭、蜀香火腿饭、辣椒炒肉、鹿茸菇扒米饭、外婆菜鸡蛋、泡椒笋炒肉、农家一碗香、干锅土豆片、擂椒茄子皮蛋、肉沫酸豆角", "文科组团"),
-  group("canteen", "文科食堂 2F", "辣肉面馆", "招牌肉臊汤面、招牌辣肉汤面、清汤面、绿蛋清汤面、酸菜肉丝汤面、豌豆肉末汤面、大块卤肉汤面、经典牛肉面、招牌肉臊拌面、麻酱鸡丝拌面、经典麻酱拌面、酸豆角肉沫拌面、招牌辣肉拌面、鸡蛋炸酱面、肉末炸酱面、混合炸酱面", "文科组团"),
+  group("canteen", "文科食堂 2F", "捞香婆香汁拌饭（辣椒炒肉档口）", "回味鸭腿饭、啫啫鸡腿饭、金牌肘子饭、糖醋烧肉饭、蜜汁烤肉饭、川香鸡鸡饭、火爆鸡丁饭、蜀香火腿饭、辣椒炒肉、鹿茸菇扒米饭、外婆菜鸡蛋、泡椒笋炒肉、农家一碗香、干锅土豆片、擂椒茄子皮蛋、肉沫酸豆角", "文科组团"),
+  group("canteen", "文科食堂 2F", "辣肉面馆（朱家小馆）", "招牌肉臊汤面、招牌辣肉汤面、清汤面、绿蛋清汤面、酸菜肉丝汤面、豌豆肉末汤面、大块卤肉汤面、经典牛肉面、招牌肉臊拌面、麻酱鸡丝拌面、经典麻酱拌面、酸豆角肉沫拌面、招牌辣肉拌面、鸡蛋炸酱面、肉末炸酱面、混合炸酱面", "文科组团"),
   group("canteen", "文科食堂 2F", "云南鲜烫米线", "招牌肉酱米线、招牌肉酱面、干拌肉酱米线、干拌肉酱面、鲜烫牛肉米线、鲜烫牛肉面", "文科组团"),
   group("canteen", "文科食堂 2F", "重庆小面", "清汤面、重庆小面、酸菜肉丝面、西红柿鸡蛋面、碗杂面、小酥肉面、鸡丁拌面、香菇鸡肉面、大块卤肉面、猪肝面、精品牛肉面、酸豆角肉沫面、炸酱面、酸菜肉丝拌面、酸豆角肉沫拌面、鸡丝拌面、双椒鸡丁面、香菇鸡肉拌面、西红柿鸡蛋拌面、鸡渣拌面", "文科组团"),
   group("canteen", "文科食堂 2F", "钵钵鸡&鸡架拌饭", "钵钵鸡、小酥肉、肉卷、蔬菜时蔬、啵啵鱼、蔬菜拌饭、火腿拌饭、鸡腿拌饭、鸡架拌饭、双拼拌饭、鸡胸拌饭、鸡翅尖拌饭、全家福拌饭、蔬菜拌面、火腿拌面、鸡腿拌面、鸡架拌面、双拼拌面、鸡胸拌面、鸡翅尖拌面、全家福拌面", "文科组团"),
@@ -164,6 +169,16 @@ const dialogContent = $("#dialogContent");
 const dialogKicker = $(".decision-dialog .section-kicker");
 const dialogShuffleBtn = $("#dialogShuffle");
 const dialogOkBtn = $("#dialogOk");
+const wheelCampus = $("#wheelCampus");
+const wheelDisc = $("#wheelDisc");
+const wheelLabels = $("#wheelLabels");
+const wheelResult = $("#wheelResult");
+const spinWheelBtn = $("#spinWheelBtn");
+const wheelPoolCount = $("#wheelPoolCount");
+const wheelState = {
+  rotation: 0,
+  currentVenue: null
+};
 
 function group(source, place, window, itemText, area = "理科组团") {
   return {
@@ -190,7 +205,8 @@ function expandGroup(menuGroup) {
 function makeFood({ source, campus, area, place, window, name, rating, reason }) {
   const placeInfo = normalizePlace(place);
   const rawText = `${name}${window}${place}`;
-  const placeholder = /待补充|占位/.test(rawText);
+  const openChoiceWindow = /自选|烤盘饭|经济快餐窗口|百味炒饭|鲁佬爷油泼鸡|麻酱麻辣拌/.test(window) && name === window;
+  const placeholder = /待补充|占位|到店自选|现场菜单自选|平台自选/.test(rawText) || openChoiceWindow;
   const displayWindow = /待补充|待采集/.test(window) ? (source === "delivery" ? "外卖平台" : "现场窗口") : window;
   const displayName = placeholder ? fallbackDishName(source, placeInfo.name, displayWindow) : name;
   return {
@@ -423,6 +439,7 @@ function recommendationReason(recommendation) {
 
 function renderCurrent(recommendation) {
   const { venue, dish } = recommendation;
+  mainResult.classList.remove("is-updating");
   mainResult.innerHTML = `
     <h3>${venue.name}</h3>
     <div class="meta-line">
@@ -439,6 +456,8 @@ function renderCurrent(recommendation) {
       <button class="secondary-action compact-action" type="button" data-preview-menu="${venue.id}">预览菜单</button>
     </div>
   `;
+  mainResult.offsetWidth;
+  mainResult.classList.add("is-updating");
   saveBtn.classList.toggle("active", state.favorites.has(venue.id));
   saveBtn.textContent = state.favorites.has(venue.id) ? "已收藏" : "收藏";
 }
@@ -611,6 +630,115 @@ function toggleFavorite(id) {
   }
 }
 
+function getWheelVenues() {
+  const campus = wheelCampus.value;
+  return venues.filter((venue) => venue.campus === campus);
+}
+
+function wheelGradient(count) {
+  const palette = ["#075a4a", "#d7a83f", "#c9472d", "#8fb6a7", "#113f38", "#e4c874"];
+  const safeCount = Math.max(count, 1);
+  const step = 100 / safeCount;
+  return `conic-gradient(${Array.from({ length: safeCount })
+    .map((_, index) => `${palette[index % palette.length]} ${index * step}% ${(index + 1) * step}%`)
+    .join(", ")})`;
+}
+
+function sampleWheelLabels(pool) {
+  const maxLabels = 10;
+  if (pool.length <= maxLabels) return pool;
+  return Array.from({ length: maxLabels }, (_, index) => pool[Math.floor((index * pool.length) / maxLabels)]);
+}
+
+function compactWheelLabel(name) {
+  return name.length > 8 ? `${name.slice(0, 8)}...` : name;
+}
+
+function renderWheel() {
+  if (!wheelCampus) return;
+  const pool = getWheelVenues();
+  wheelPoolCount.textContent = `${pool.length} 家可选`;
+  wheelDisc.style.setProperty("--wheel-gradient", wheelGradient(pool.length));
+  const labelPool = sampleWheelLabels(pool);
+  wheelLabels.innerHTML = labelPool
+    .map((venue, index) => {
+      const angle = `${(360 / Math.max(labelPool.length, 1)) * index}deg`;
+      return `<span class="wheel-label" style="--angle:${angle}">${compactWheelLabel(venue.name)}</span>`;
+    })
+    .join("");
+  wheelResult.classList.remove("is-hit");
+  wheelResult.innerHTML = `
+    <div class="section-kicker">${wheelCampus.value}</div>
+    <h3>等一声开饭令</h3>
+    <p>这一轮会从当前校区的所有商家和食堂窗口里抽一家。</p>
+  `;
+}
+
+function renderWheelResult(venue) {
+  const summary = venue.menuSummary === "到店看现场菜单" ? "到店后按现场菜单自选" : `已收录 ${venue.menuSummary}`;
+  wheelState.currentVenue = venue;
+  wheelResult.classList.remove("is-hit");
+  wheelResult.innerHTML = `
+    <div class="section-kicker">转到了</div>
+    <h3>${venue.name}</h3>
+    <p>${venueLocation(venue)}</p>
+    <div class="dish-preview"><span>本轮只抽店铺</span><strong>${summary}</strong></div>
+    <div class="tag-row">${venue.tags.slice(0, 6).map((tag) => `<span class="tag">${tag}</span>`).join("")}</div>
+    <div class="result-actions">
+      <button class="secondary-action compact-action" type="button" data-wheel-pick="${venue.id}">用它推荐</button>
+      <button class="secondary-action compact-action" type="button" data-wheel-preview="${venue.id}">预览菜单</button>
+    </div>
+  `;
+  wheelResult.offsetWidth;
+  wheelResult.classList.add("is-hit");
+}
+
+function spinWheel() {
+  const pool = getWheelVenues();
+  if (!pool.length || spinWheelBtn.disabled) return;
+  const index = Math.floor(Math.random() * pool.length);
+  const venue = pool[index];
+  const segment = 360 / pool.length;
+  const target = 360 - index * segment - segment / 2;
+  wheelState.rotation += 1440 + target + Math.random() * Math.min(segment * 0.5, 12);
+  spinWheelBtn.disabled = true;
+  spinWheelBtn.textContent = "转动中";
+  wheelDisc.classList.add("is-spinning");
+  wheelDisc.style.transform = `rotate(${wheelState.rotation}deg)`;
+  window.setTimeout(() => {
+    spinWheelBtn.disabled = false;
+    spinWheelBtn.textContent = "再转一次";
+    wheelDisc.classList.remove("is-spinning");
+    renderWheelResult(venue);
+  }, 4200);
+}
+
+function initWheel() {
+  if (!wheelCampus) return;
+  wheelCampus.innerHTML = Object.keys(structure).map((campus) => `<option value="${campus}">${campus}</option>`).join("");
+  wheelCampus.value = structure["津南"] ? "津南" : Object.keys(structure)[0];
+  wheelCampus.addEventListener("change", renderWheel);
+  spinWheelBtn.addEventListener("click", spinWheel);
+  wheelResult.addEventListener("click", (event) => {
+    const pickButton = event.target.closest("[data-wheel-pick]");
+    if (pickButton) {
+      const venue = venues.find((item) => item.id === pickButton.dataset.wheelPick);
+      if (!venue) return;
+      state.current = makeRecommendation(venue);
+      addHistory(state.current);
+      renderCurrent(state.current);
+      renderStats();
+      location.hash = "#recommend";
+    }
+    const previewButton = event.target.closest("[data-wheel-preview]");
+    if (previewButton) {
+      const venue = venues.find((item) => item.id === previewButton.dataset.wheelPreview);
+      if (venue) renderMenuPreview(venue);
+    }
+  });
+  renderWheel();
+}
+
 function syncFilters() {
   state.campus = $("#campus").value;
   state.area = $("#area").value;
@@ -780,6 +908,7 @@ foodGrid.addEventListener("click", (event) => {
 
 initSelectors();
 initProfile();
+initWheel();
 renderCampusMap();
 renderResult({ record: false });
 renderGrid();
