@@ -335,6 +335,23 @@ input:focus {
   color: #9d321e;
 }
 
+.preference-groups {
+  display: grid;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.preference-group {
+  display: grid;
+  gap: 8px;
+}
+
+.preference-group > span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .action-row {
   display: flex;
   align-items: center;
@@ -371,6 +388,12 @@ input:focus {
   color: var(--nankai-dark);
   padding: 0 16px;
   font-weight: 800;
+}
+
+.compact-action {
+  min-height: 38px;
+  padding: 0 12px;
+  font-size: 13px;
 }
 
 .icon-action {
@@ -442,6 +465,53 @@ svg {
 
 .reason {
   margin-bottom: 14px;
+}
+
+.dish-pick,
+.dish-preview {
+  display: grid;
+  gap: 5px;
+  border: 1px solid rgba(11, 107, 87, 0.14);
+  border-radius: 8px;
+  background: #f7fbf8;
+  padding: 12px;
+}
+
+.dish-pick {
+  margin-bottom: 14px;
+}
+
+.dish-pick span,
+.dish-preview span {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.dish-pick strong {
+  font-size: clamp(24px, 4vw, 34px);
+  line-height: 1.12;
+}
+
+.dish-preview strong {
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.result-actions,
+.card-actions,
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.result-actions {
+  margin-top: 16px;
+}
+
+.profile-actions {
+  margin-top: 14px;
 }
 
 .tag-row {
@@ -618,6 +688,11 @@ svg {
   margin-top: auto;
 }
 
+.card-actions {
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .save-small {
   display: grid;
   width: 38px;
@@ -764,6 +839,30 @@ svg {
   justify-content: flex-end;
   gap: 10px;
   margin-top: 22px;
+}
+
+.menu-preview-list {
+  display: grid;
+  max-height: 360px;
+  overflow: auto;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-preview-list li {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px 12px;
+}
+
+.menu-preview-list span {
+  color: var(--muted);
+  font-size: 12px;
 }
 
 @media (max-width: 920px) {

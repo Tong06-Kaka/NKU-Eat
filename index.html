@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>今天南开吃什么</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260707a" />
   </head>
   <body>
     <div class="onboarding" id="onboarding" hidden>
       <section class="login-card" aria-labelledby="loginTitle">
         <div class="avatar-preview" id="avatarPreview">南</div>
         <div>
-          <div class="section-kicker">第一次见面</div>
+          <div class="section-kicker" id="profileFormKicker">第一次见面</div>
           <h1 id="loginTitle">先给你的饭点档案起个名</h1>
-          <p class="intro">昵称和头像只保存在当前浏览器，用来让推荐结果更有个人感。</p>
+          <p class="intro" id="profileFormIntro">昵称和头像只保存在当前浏览器，用来让推荐结果更有个人感。</p>
         </div>
         <label>
           昵称
@@ -22,6 +22,7 @@
         <div class="avatar-grid" id="avatarGrid" aria-label="头像选择"></div>
         <div class="action-row">
           <button class="secondary-action" type="button" id="aiProfileBtn">AI 给我想一个</button>
+          <button class="secondary-action" type="button" id="cancelProfileBtn" hidden>取消</button>
           <button class="primary-action" type="button" id="enterBtn">进入网站</button>
         </div>
       </section>
@@ -49,7 +50,7 @@
             <div class="section-kicker">饭点到了</div>
             <h1>别纠结了，今天就吃这个。</h1>
             <p class="intro">
-              按校区、组团、食堂/店铺、预算和口味筛选。食堂项使用“排队压力”，外卖项使用“配送时间”，避免把两类选择硬凑成一个指标。
+              先选校区、组团和食堂/店铺，再用种类、口味和需求标签缩小范围。推荐会先告诉你去哪家，再给出这家的可选菜品。
             </p>
 
             <form class="filters" id="filters">
@@ -76,47 +77,45 @@
                   食堂 / 店铺
                   <select id="place"></select>
                 </label>
-                <label>
-                  预算
-                  <select id="budget">
-                    <option value="999">不限</option>
-                    <option value="12">12 元以内</option>
-                    <option value="18" selected>18 元以内</option>
-                    <option value="25">25 元以内</option>
-                    <option value="35">35 元以内</option>
-                  </select>
-                </label>
-                <label>
-                  可接受等待
-                  <select id="effort">
-                    <option value="1">尽量快</option>
-                    <option value="2" selected>正常饭点可接受</option>
-                    <option value="3">排队/配送久一点也行</option>
-                  </select>
-                </label>
-                <label>
-                  当前状态
-                  <select id="mood">
-                    <option value="饱腹" selected>想吃饱</option>
-                    <option value="清淡">想清淡</option>
-                    <option value="高蛋白">想高蛋白</option>
-                    <option value="换口味">想换口味</option>
-                    <option value="安慰">需要安慰餐</option>
-                  </select>
-                </label>
               </div>
 
               <fieldset>
-                <legend>口味偏好</legend>
-                <div class="chips" id="tasteChips">
-                  <button type="button" data-value="米饭">米饭</button>
-                  <button type="button" data-value="面食">面食</button>
-                  <button type="button" data-value="辣">辣</button>
-                  <button type="button" data-value="不辣">不辣</button>
-                  <button type="button" data-value="清淡">清淡</button>
-                  <button type="button" data-value="小吃">小吃</button>
-                  <button type="button" data-value="甜口">甜口</button>
-                  <button type="button" data-value="咖啡">咖啡</button>
+                <legend>偏好标签</legend>
+                <div class="preference-groups" id="tasteChips">
+                  <div class="preference-group">
+                    <span>菜品种类</span>
+                    <div class="chips">
+                      <button type="button" data-value="面">面</button>
+                      <button type="button" data-value="饭">饭</button>
+                      <button type="button" data-value="粉">粉</button>
+                      <button type="button" data-value="饼">饼</button>
+                      <button type="button" data-value="小吃">小吃</button>
+                      <button type="button" data-value="饮品">饮品</button>
+                      <button type="button" data-value="甜品">甜品</button>
+                    </div>
+                  </div>
+                  <div class="preference-group">
+                    <span>口味</span>
+                    <div class="chips">
+                      <button type="button" data-value="辣">辣</button>
+                      <button type="button" data-value="不辣">不辣</button>
+                      <button type="button" data-value="酸">酸</button>
+                      <button type="button" data-value="甜">甜</button>
+                      <button type="button" data-value="咸鲜">咸鲜</button>
+                      <button type="button" data-value="清淡">清淡</button>
+                    </div>
+                  </div>
+                  <div class="preference-group">
+                    <span>特殊需求</span>
+                    <div class="chips">
+                      <button type="button" data-value="减脂">减脂</button>
+                      <button type="button" data-value="高蛋白">高蛋白</button>
+                      <button type="button" data-value="下午茶">下午茶</button>
+                      <button type="button" data-value="早餐">早餐</button>
+                      <button type="button" data-value="正餐">正餐</button>
+                      <button type="button" data-value="自选">自选</button>
+                    </div>
+                  </div>
                 </div>
               </fieldset>
 
@@ -144,7 +143,7 @@
 
         <section class="notice-band">
           <strong>数据说明</strong>
-          <span>当前菜单是用于验证推荐流程的示例数据，不是正式采集结果。真实上线需要你继续补充每个食堂、楼层、窗口、菜品、价格和供应时段。</span>
+          <span>当前菜单用于验证推荐流程。真实上线时继续补充每个食堂、店铺、窗口和菜品即可。</span>
         </section>
 
         <section class="library-section" id="library">
@@ -179,6 +178,9 @@
                 <div class="section-kicker">个人档案</div>
                 <h2 id="profileName">南开同学</h2>
                 <p>收藏、推荐历史和个人档案都保存在当前浏览器。后续可以扩展为账号系统、评分、同学投稿和后台菜单维护。</p>
+                <div class="profile-actions">
+                  <button class="secondary-action" type="button" id="editProfileBtn">修改档案</button>
+                </div>
               </div>
             </div>
             <div class="stats">
@@ -207,6 +209,6 @@
       </div>
     </dialog>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=20260707a"></script>
   </body>
 </html>
