@@ -11,9 +11,10 @@ const structure = {
       "肯德基（肯律轻食）",
       "711便利店快餐",
       "原汁味｜美食广场",
+      "台峡糕点",
       "理科食堂"
     ],
-    文科组团: ["芸锦拉面", "福莲餐厅", "朴大叔拌饭", "橘南小巷-招牌红焖羊肉火锅·秘制烤鱼", "肯德基", "清真餐厅", "文科食堂"],
+    文科组团: ["芸锦拉面", "福莲餐厅", "朴大叔拌饭", "橘南小巷-招牌红焖羊肉火锅·秘制烤鱼", "肯德基", "元和西饼", "清真餐厅", "文科食堂"],
     校外外卖: ["津南周边"]
   }
 };
@@ -65,6 +66,7 @@ const menuGroups = [
   group("store", "肯德基（肯律轻食）", "独立经营店", "到店自选"),
   group("store", "711便利店快餐", "便利店快餐", "到店自选"),
   group("store", "原汁味｜美食广场", "美食广场", "到店自选"),
+  group("store", "台峡糕点", "甜品糕点", "到店自选"),
 
   group("canteen", "理科食堂 1F", "山东杂粮煎饼", "脆饼鸡蛋煎饼、鸡肉肠、肉松、玉米粒、海带丝、土豆丝、里脊肉、鸡柳、烤肠"),
   group("canteen", "理科食堂 1F", "隆江猪肘饭", "隆江猪肘饭"),
@@ -109,6 +111,7 @@ const menuGroups = [
   group("store", "朴大叔拌饭", "独立经营店", "到店自选", "文科组团"),
   group("store", "橘南小巷-招牌红焖羊肉火锅·秘制烤鱼", "独立经营店", "红焖羊肉火锅、秘制烤鱼", "文科组团"),
   group("store", "肯德基", "独立经营店", "到店自选", "文科组团"),
+  group("store", "元和西饼", "甜品糕点", "到店自选", "文科组团"),
 
   group("canteen", "清真餐厅", "早餐类", "小米粥、紫米粥、南瓜粥、白米粥、原味豆浆、煮鸡蛋、素包子、豆沙饼、小菜、馅饼", "文科组团"),
   group("canteen", "清真餐厅", "中式炸鸡", "鸡翅、翅中、翅根、香骨鸡、鸡肉条、鸡叉骨、地瓜条、烤奶酪", "文科组团"),
@@ -156,7 +159,9 @@ const state = {
   current: null,
   profile: JSON.parse(localStorage.getItem("nkuProfile") || "null"),
   favorites: new Set(JSON.parse(localStorage.getItem("nkuFavorites") || "[]").filter((id) => venues.some((venue) => venue.id === id))),
-  history: JSON.parse(localStorage.getItem("nkuHistory") || "[]").map(normalizeHistoryItem)
+  history: JSON.parse(localStorage.getItem("nkuHistory") || "[]").map(normalizeHistoryItem),
+  dislikes: normalizeDislikes(JSON.parse(localStorage.getItem("nkuDislikes") || "null")),
+  dislikeTerms: JSON.parse(localStorage.getItem("nkuDislikeTerms") || "{}")
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -175,6 +180,8 @@ const wheelLabels = $("#wheelLabels");
 const wheelResult = $("#wheelResult");
 const spinWheelBtn = $("#spinWheelBtn");
 const wheelPoolCount = $("#wheelPoolCount");
+const searchAssist = $("#searchAssist");
+const dislikeList = $("#dislikeList");
 const wheelState = {
   rotation: 0,
   currentVenue: null
@@ -220,7 +227,7 @@ function makeFood({ source, campus, area, place, window, name, rating, reason })
     floor: placeInfo.floor,
     window: displayWindow,
     rating,
-    tags: inferTags(displayName, displayWindow),
+    tags: inferTags(displayName, displayWindow, placeInfo.name),
     reason,
     placeholder
   };
@@ -237,7 +244,7 @@ function normalizePlace(place) {
 function fallbackDishName(source, place, window) {
   const text = `${place}${window}`;
   if (source === "delivery") return "平台自选";
-  if (/咖啡|饮品|冰城|西饼/.test(text)) return "饮品甜品自选";
+  if (/咖啡|饮品|冰城|西饼|糕点|甜品/.test(text)) return "饮品甜品自选";
   if (/轻食/.test(text)) return "轻食自选";
   if (/美食广场|独立经营店|快餐|KFC|肯德基|711/.test(text)) return "到店自选";
   return "现场菜单自选";
@@ -258,27 +265,31 @@ function inferRating(name) {
 function inferTags(name, window, place = "") {
   const text = `${name}${window}${place}`;
   const tags = new Set();
-  if (/饭|盖浇|拌饭|炒饭|米饭|便当|套餐|石锅|烤盘饭|茶泡饭/.test(text)) tags.add("饭");
-  if (/面|拉面|刀削|板面|拌面|小面|油泼|燃面|烩面|凉面|泡馍/.test(text)) tags.add("面");
-  if (/粉|米线|螺蛳|米皮|牛筋面|渔粉/.test(text)) tags.add("粉");
+  const dessertStore = /元和西饼|台峡糕点|糕点|甜品|蜜雪|奶茶|咖啡|饮品|甜品糕点/.test(text);
+  const dessertDish = /豆沙|红豆|红糖|糍粑|汤圆|奶酪|蛋糕|面包|布丁|冰粉|双皮奶|龟苓膏|南瓜|冰糖|甜品自选/.test(text);
+  if (/饭|盖浇|盖饭|拌饭|炒饭|米饭|便当|套餐|石锅|烤盘饭|茶泡饭|猪肘饭|鸡饭|卤肉饭/.test(text)) tags.add("饭");
+  if (/面|拉面|刀削|板面|拌面|小面|油泼|燃面|烩面|凉面|泡馍|牛筋面/.test(text)) tags.add("面");
+  if (/粉|米线|螺蛳|米皮|渔粉|米粉/.test(text)) tags.add("粉");
   if (/饼|煎饼|馅饼|肉夹馍|烧饼|掉渣饼/.test(text)) tags.add("饼");
-  if (/串|烤肠|土豆|豆腐|糍粑|小酥肉|炸蛋|肉卷|鸡翅|鸡叉骨|小吃/.test(text)) tags.add("小吃");
-  if (/咖啡|饮品|豆浆|奶茶|冰城|瑞幸|茶|粥/.test(text)) tags.add("饮品");
-  if (/甜|红糖|豆沙|糍粑|汤圆|蜜雪|西饼|奶酪|蜜汁|南瓜/.test(text)) tags.add("甜品");
+  if (/串|烤肠|土豆|豆腐|糍粑|小酥肉|炸蛋|肉卷|鸡翅|鸡叉骨|小吃|鸡米花|薯|包浆|酥肉|藕盒|响铃卷/.test(text)) tags.add("小吃");
+  if (/咖啡|饮品|豆浆|奶茶|冰城|瑞幸|茶|粥|酸辣汤|疙瘩汤|豆腐脑/.test(text)) tags.add("饮品");
+  if (dessertStore || dessertDish) tags.add("甜品");
   if (/辣|麻|椒|酸辣|螺蛳|燃面|红油|干锅|麻辣|剁椒|泡椒/.test(text)) tags.add("辣");
+  if (/自选|烤盘饭|钵钵鸡|煎饼|拌饭|盖饭|便当|套餐|茶泡饭|轻食/.test(text)) tags.add("不辣");
   if (/酸|番茄|酸菜|酸豆角|酸汤|柠檬|糖醋/.test(text)) tags.add("酸");
-  if (/甜|蜜汁|红糖|糖醋|豆沙|甜辣|奶|南瓜/.test(text)) tags.add("甜");
+  if (/甜|蜜汁|红糖|糖醋|豆沙|甜辣|奶|南瓜|冰糖|沙拉|红枣|蜂蜜|蛋糕|糕点|元和西饼|甜品/.test(text)) tags.add("甜");
   if (/酱|卤|烧|炒|烤|孜然|黑椒|咖喱|肉|饭|面|粉|锅/.test(text)) tags.add("咸鲜");
   if (/清汤|水煮|蒸|轻食|谷物|沙拉|黄瓜|南瓜|玉米|青菜|娃娃菜|冬瓜|时蔬|水煮虾|鸡胸|巴沙鱼/.test(text)) {
     tags.add("清淡");
     tags.add("减脂");
   }
-  if (/牛肉|羊肉|鸡|鸭|虾|鱼|排骨|肥牛|猪肘|叉烧|五花肉|鸡胸|巴沙鱼|金枪鱼|鸡腿/.test(text)) tags.add("高蛋白");
-  if (/咖啡|饮品|奶|甜品|西饼|冰城|豆浆|茶|糍粑|汤圆/.test(text)) tags.add("下午茶");
+  if (/牛肉|羊肉|鸡|鸭|虾|鱼|排骨|肥牛|猪肘|叉烧|五花肉|鸡胸|巴沙鱼|金枪鱼|鸡腿|鸡排|肉|蛋|豆腐/.test(text)) tags.add("高蛋白");
+  if (/咖啡|饮品|奶|甜品|元和西饼|糕点|冰城|豆浆|茶|糍粑|汤圆|蛋糕|面包|红豆|豆沙/.test(text)) tags.add("下午茶");
   if (/早餐|粥|包子|煎饼|豆浆|鸡蛋|馅饼|小笼包|蒸饺/.test(text)) tags.add("早餐");
   if (/自选|烤盘饭|麻辣拌|钵钵鸡|美食广场|到店自选|现场菜单|轻食自选|平台自选/.test(text)) tags.add("自选");
   if (!tags.has("辣")) tags.add("不辣");
-  if ([...tags].some((tag) => ["饭", "面", "粉", "饼"].includes(tag)) || /饺|馄饨|套餐|便当|自选/.test(text)) tags.add("正餐");
+  if ([...tags].some((tag) => ["饭", "面", "粉", "饼"].includes(tag)) || /饺|馄饨|套餐|便当|自选|小炒|快餐/.test(text)) tags.add("正餐");
+  if (tags.has("甜品") && ![...tags].some((tag) => ["饭", "面", "粉", "饼"].includes(tag))) tags.delete("正餐");
   if (!tags.size) tags.add("正餐");
   return [...tags];
 }
@@ -295,6 +306,45 @@ function normalizeHistoryItem(item) {
     dish: "旧版推荐",
     time: item.time || ""
   };
+}
+
+function normalizeDislikes(raw) {
+  const dislikes = raw && typeof raw === "object" ? raw : {};
+  return {
+    venues: new Set((dislikes.venues || []).filter((id) => venues.some((venue) => venue.id === id))),
+    foods: new Set((dislikes.foods || []).filter((id) => foods.some((food) => food.id === id)))
+  };
+}
+
+function persistDislikes() {
+  localStorage.setItem(
+    "nkuDislikes",
+    JSON.stringify({
+      venues: [...state.dislikes.venues],
+      foods: [...state.dislikes.foods]
+    })
+  );
+}
+
+function persistDislikeTerms() {
+  localStorage.setItem("nkuDislikeTerms", JSON.stringify(state.dislikeTerms));
+}
+
+function isVenueDisliked(venue) {
+  return state.dislikes.venues.has(venue.id);
+}
+
+function isFoodDisliked(food) {
+  return state.dislikes.foods.has(food.id);
+}
+
+function foodMatchesTastes(food) {
+  if (!state.tastes.size) return true;
+  return [...state.tastes].every((taste) => food.tags.includes(taste));
+}
+
+function getAllowedFoods(venue, { avoidId = "", ignoreTaste = false } = {}) {
+  return venue.foods.filter((food) => food.id !== avoidId && !isFoodDisliked(food) && (ignoreTaste || foodMatchesTastes(food)));
 }
 
 function buildVenues(foodItems) {
@@ -377,8 +427,10 @@ function initSelectors() {
 function scoreDish(food) {
   let score = food.rating * 10;
   state.tastes.forEach((taste) => {
-    if (food.tags.includes(taste)) score += 9;
+    if (food.tags.includes(taste)) score += 18;
+    else score -= 20;
   });
+  if (isFoodDisliked(food)) score -= 1000;
   return score;
 }
 
@@ -388,35 +440,41 @@ function scoreVenue(venue) {
   if (state.campus === "all" || state.campus === venue.campus) score += 16;
   if (state.area === "all" || state.area === venue.area) score += 14;
   if (state.place === "all" || state.place === venue.place) score += 18;
-  state.tastes.forEach((taste) => {
-    if (venue.tags.includes(taste)) score += 12;
-  });
+  const allowedFoods = getAllowedFoods(venue);
+  const bestDish = allowedFoods.length ? [...allowedFoods].sort((a, b) => scoreDish(b) - scoreDish(a))[0] : null;
+  if (bestDish) score += scoreDish(bestDish) / 3;
   if (state.favorites.has(venue.id)) score += 5;
   if (venue.foods.length > 1) score += 2;
+  if (isVenueDisliked(venue)) score -= 1000;
   return score;
 }
 
 function getRankedVenues() {
   return venues
+    .filter((venue) => !isVenueDisliked(venue))
     .filter((venue) => state.source === "all" || venue.source === state.source)
     .filter((venue) => state.campus === "all" || venue.campus === state.campus)
     .filter((venue) => state.area === "all" || venue.area === state.area)
     .filter((venue) => state.place === "all" || venue.place === state.place)
+    .filter((venue) => getAllowedFoods(venue).length)
     .map((venue) => ({ ...venue, score: scoreVenue(venue) }))
     .sort((a, b) => b.score - a.score);
 }
 
-function pickDish(venue, { random = false, avoidId = "" } = {}) {
-  const candidates = venue.foods.filter((food) => food.id !== avoidId);
-  const pool = candidates.length ? candidates : venue.foods;
+function pickDish(venue, { random = false, avoidId = "", ignoreTaste = false } = {}) {
+  const candidates = getAllowedFoods(venue, { avoidId, ignoreTaste });
+  const pool = candidates.length ? candidates : getAllowedFoods(venue, { ignoreTaste: true });
+  if (!pool.length) return null;
   if (random) return pool[Math.floor(Math.random() * pool.length)];
   return [...pool].sort((a, b) => scoreDish(b) - scoreDish(a))[0];
 }
 
 function makeRecommendation(venue, options = {}) {
+  const dish = pickDish(venue, options);
+  if (!venue || !dish) return null;
   return {
     venue,
-    dish: pickDish(venue, options),
+    dish,
     score: scoreVenue(venue)
   };
 }
@@ -438,6 +496,16 @@ function recommendationReason(recommendation) {
 }
 
 function renderCurrent(recommendation) {
+  if (!recommendation) {
+    mainResult.innerHTML = `
+      <h3>暂时没找到合适的</h3>
+      <p class="reason">当前筛选、偏好或不喜欢列表把可选项都排除了。可以少选几个标签，或到档案页调整“不喜欢”。</p>
+    `;
+    backupResults.innerHTML = "";
+    saveBtn.classList.remove("active");
+    saveBtn.textContent = "收藏";
+    return;
+  }
   const { venue, dish } = recommendation;
   mainResult.classList.remove("is-updating");
   mainResult.innerHTML = `
@@ -454,6 +522,8 @@ function renderCurrent(recommendation) {
     <div class="result-actions">
       <button class="secondary-action compact-action" type="button" data-dish-shuffle>在这家换一道</button>
       <button class="secondary-action compact-action" type="button" data-preview-menu="${venue.id}">预览菜单</button>
+      <button class="secondary-action compact-action danger-action" type="button" data-dislike-food="${dish.id}">不喜欢这道</button>
+      <button class="secondary-action compact-action danger-action" type="button" data-dislike-venue="${venue.id}">不喜欢这家</button>
     </div>
   `;
   mainResult.offsetWidth;
@@ -463,6 +533,7 @@ function renderCurrent(recommendation) {
 }
 
 function renderDialog(recommendation) {
+  if (!recommendation) return;
   const { venue, dish } = recommendation;
   dialogKicker.textContent = "已经替你决定";
   dialogShuffleBtn.hidden = false;
@@ -477,6 +548,10 @@ function renderDialog(recommendation) {
     </div>
     <p>${recommendationReason(recommendation)}</p>
     <div class="tag-row">${dish.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}</div>
+    <div class="result-actions dialog-extra-actions">
+      <button class="secondary-action compact-action danger-action" type="button" data-dislike-food="${dish.id}">不喜欢这道</button>
+      <button class="secondary-action compact-action danger-action" type="button" data-dislike-venue="${venue.id}">不喜欢这家</button>
+    </div>
   `;
   if (dialog.open) return;
   if (typeof dialog.showModal === "function") dialog.showModal();
@@ -511,10 +586,20 @@ function renderMenuPreview(venue) {
 
 function renderResult({ random = false, record = true, popup = false } = {}) {
   const ranked = getRankedVenues();
-  const pool = ranked.length ? ranked : venues.map((venue) => ({ ...venue, score: scoreVenue(venue) })).sort((a, b) => b.score - a.score);
+  const pool = ranked.length ? ranked : [];
+  if (!pool.length) {
+    state.current = null;
+    renderCurrent(null);
+    renderStats();
+    return;
+  }
   const primaryVenue = random ? pool[Math.floor(Math.random() * pool.length)] : pool[0];
   const recommendation = makeRecommendation(primaryVenue, { random });
-  const backups = pool.filter((venue) => venue.id !== primaryVenue.id).slice(0, 3);
+  if (!recommendation) {
+    renderCurrent(null);
+    return;
+  }
+  const backups = pool.filter((venue) => venue.id !== primaryVenue.id && pickDish(venue)).slice(0, 3);
   state.current = recommendation;
   if (record) addHistory(recommendation);
   renderCurrent(recommendation);
@@ -522,6 +607,7 @@ function renderResult({ random = false, record = true, popup = false } = {}) {
     .map(
       (venue) => {
         const dish = pickDish(venue);
+        if (!dish) return "";
         return `
         <button class="mini-card" type="button" data-pick="${venue.id}">
           <strong>${venue.name}</strong>
@@ -530,38 +616,175 @@ function renderResult({ random = false, record = true, popup = false } = {}) {
       `;
       }
     )
+    .filter(Boolean)
     .join("");
   renderStats();
   if (popup) renderDialog(recommendation);
 }
 
-function renderGrid() {
-  const query = state.search.trim().toLowerCase();
-  const visible = venues.filter((venue) => {
-    if (state.tab === "favorite" && !state.favorites.has(venue.id)) return false;
-    if (state.tab !== "all" && state.tab !== "favorite" && venue.source !== state.tab) return false;
-    if (!query) return true;
-    return [venue.name, venue.campus, venue.area, venue.place, venue.floor, ...venue.windows, ...venue.tags, ...venue.foods.map((food) => food.name)].some((item) =>
-      item.toLowerCase().includes(query)
-    );
-  });
+function normalizeSearchText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/[｜·\s/（）()&+_-]/g, "");
+}
 
-  if (!visible.length) {
-    foodGrid.innerHTML = `<div class="empty">暂时没有匹配结果。真实菜单补充后，这里会更有用。</div>`;
+function editDistance(a, b) {
+  const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = 0; i <= a.length; i += 1) dp[i][0] = i;
+  for (let j = 0; j <= b.length; j += 1) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i += 1) {
+    for (let j = 1; j <= b.length; j += 1) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+  return dp[a.length][b.length];
+}
+
+function isSubsequence(query, target) {
+  let index = 0;
+  for (const char of target) {
+    if (char === query[index]) index += 1;
+    if (index === query.length) return true;
+  }
+  return false;
+}
+
+function fuzzyScore(query, target) {
+  const q = normalizeSearchText(query);
+  const text = normalizeSearchText(target);
+  if (!q || !text) return 0;
+  if (text.includes(q)) return 120 + Math.min(q.length * 2, 20);
+  if (q.length <= 1) return 0;
+  if (q.length <= 2) return isSubsequence(q, text) ? 70 : 0;
+  let best = 0;
+  const minLength = Math.max(1, q.length - 1);
+  const maxLength = Math.min(text.length, q.length + 2);
+  for (let length = minLength; length <= maxLength; length += 1) {
+    for (let start = 0; start <= text.length - length; start += 1) {
+      const part = text.slice(start, start + length);
+      const distance = editDistance(q, part);
+      const allowed = Math.max(1, Math.floor(q.length * 0.34));
+      if (distance <= allowed) best = Math.max(best, 88 - distance * 16 - Math.abs(length - q.length) * 4);
+    }
+  }
+  if (isSubsequence(q, text)) best = Math.max(best, 58);
+  const typeEnding = q.match(/[饭面粉饼]$/)?.[0];
+  if (typeEnding && !text.includes(typeEnding)) best = Math.min(best, 45);
+  return best;
+}
+
+function venuePassesLibraryTab(venue) {
+  if (state.tab === "favorite") return state.favorites.has(venue.id);
+  if (state.tab !== "all" && venue.source !== state.tab) return false;
+  return true;
+}
+
+function buildSearchResults() {
+  const query = state.search.trim();
+  const baseVenues = venues.filter(venuePassesLibraryTab);
+  if (!query) {
+    return baseVenues.map((venue) => ({ venue, matchedFoods: [], score: 0, matchType: "" }));
+  }
+  return baseVenues
+    .map((venue) => {
+      const venueFields = [venue.name, venue.campus, venue.area, venue.place, venue.floor, ...venue.windows, ...venue.tags];
+      const venueScore = Math.max(...venueFields.map((item) => fuzzyScore(query, item)));
+      const matchedFoods = venue.foods
+        .map((food) => ({ food, score: fuzzyScore(query, food.name) }))
+        .filter((item) => item.score >= 54)
+        .sort((a, b) => b.score - a.score);
+      const bestFoodScore = matchedFoods[0]?.score || 0;
+      const score = Math.max(venueScore, bestFoodScore);
+      if (score < 54) return null;
+      return {
+        venue,
+        matchedFoods: matchedFoods.map((item) => item.food),
+        score,
+        matchType: bestFoodScore >= venueScore ? "菜品命中" : "店铺命中"
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.score - a.score || b.matchedFoods.length - a.matchedFoods.length);
+}
+
+function searchSuggestions(results) {
+  const query = state.search.trim();
+  if (!query) return [];
+  const exactEnough = results.some((result) => result.score >= 120);
+  const candidates = [];
+  venues.forEach((venue) => {
+    candidates.push({ label: venue.name, score: fuzzyScore(query, venue.name) });
+    venue.foods.forEach((food) => candidates.push({ label: food.name, score: fuzzyScore(query, food.name) }));
+  });
+  const seen = new Set();
+  return candidates
+    .filter((item) => item.score >= (exactEnough ? 70 : 50))
+    .sort((a, b) => b.score - a.score)
+    .filter((item) => {
+      const key = normalizeSearchText(item.label);
+      if (seen.has(key) || key === normalizeSearchText(query)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, 6);
+}
+
+function renderSearchAssist(results) {
+  const query = state.search.trim();
+  if (!query) {
+    searchAssist.hidden = true;
+    searchAssist.innerHTML = "";
+    return;
+  }
+  const suggestions = searchSuggestions(results);
+  searchAssist.hidden = false;
+  searchAssist.innerHTML = `
+    <div>
+      <strong>${results.length}</strong>
+      <span>个店铺/窗口匹配“${query}”</span>
+    </div>
+    ${
+      suggestions.length
+        ? `<div class="suggestions"><span>可能想搜</span>${suggestions
+            .map((item) => `<button type="button" data-suggest-search="${item.label}">${item.label}</button>`)
+            .join("")}</div>`
+        : ""
+    }
+  `;
+}
+
+function renderGrid() {
+  const results = buildSearchResults();
+  const query = state.search.trim();
+  renderSearchAssist(results);
+  foodGrid.classList.toggle("is-searching", Boolean(query));
+
+  if (!results.length) {
+    foodGrid.innerHTML = `<div class="empty">没有直接匹配。可以点上方联想词，或换一个更短的关键词试试。</div>`;
     return;
   }
 
-  foodGrid.innerHTML = visible
+  foodGrid.innerHTML = results
     .slice(0, 180)
     .map(
-      (venue) => {
-        const dish = pickDish(venue);
+      ({ venue, matchedFoods, matchType }) => {
+        const dish = matchedFoods[0] || pickDish(venue, { ignoreTaste: true }) || venue.foods[0];
+        const matchedList = matchedFoods.slice(0, 5);
         return `
-        <article class="food-card">
+        <article class="food-card ${query ? "search-hit" : ""}">
           <div class="meta-line"><span>${sourceLabel(venue.source)}</span><span>${venue.campus}</span><span>${venue.area}</span></div>
           <h3>${venue.name}</h3>
           <p>${venueDetail(venue)}</p>
-          <div class="dish-preview"><span>推荐</span><strong>${dish.name}</strong></div>
+          <div class="dish-preview"><span>${matchType || "推荐"}</span><strong>${dish.name}</strong></div>
+          ${
+            matchedList.length
+              ? `<div class="match-list"><span>命中的菜品</span>${matchedList.map((food) => `<strong>${food.name}</strong>`).join("")}</div>`
+              : ""
+          }
           <div class="tag-row">${venue.tags.slice(0, 5).map((tag) => `<span class="tag">${tag}</span>`).join("")}</div>
           <div class="card-footer">
             <strong>${venue.menuSummary}</strong>
@@ -630,9 +853,157 @@ function toggleFavorite(id) {
   }
 }
 
+function findFood(foodId) {
+  return foods.find((food) => food.id === foodId);
+}
+
+function findVenueForFood(foodId) {
+  return venues.find((venue) => venue.foods.some((food) => food.id === foodId));
+}
+
+function dislikeFamily(name) {
+  const families = ["螺蛳粉", "酸辣粉", "米线", "小面", "拉面", "刀削面", "炒饭", "拌饭", "盖饭", "馄饨", "水饺", "煎饼", "轻食", "甜品"];
+  return families.find((family) => name.includes(family)) || "";
+}
+
+function dislikeFood(foodId, { offerBatch = true } = {}) {
+  const food = findFood(foodId);
+  if (!food) return;
+  state.dislikes.foods.add(food.id);
+  persistDislikes();
+  const family = dislikeFamily(food.name);
+  if (family) {
+    state.dislikeTerms[family] = (state.dislikeTerms[family] || 0) + 1;
+    persistDislikeTerms();
+  }
+  renderGrid();
+  renderDislikes();
+  renderWheel();
+  if (offerBatch && family && matchingFamilyFoods(family).length > 1) {
+    renderBatchDislikeDialog(family);
+    return;
+  }
+  if (dialog.open) dialog.close();
+  renderResult({ random: true, record: false });
+}
+
+function dislikeVenue(venueId) {
+  const venue = venues.find((item) => item.id === venueId);
+  if (!venue) return;
+  state.dislikes.venues.add(venue.id);
+  persistDislikes();
+  renderGrid();
+  renderDislikes();
+  renderWheel();
+  if (dialog.open) dialog.close();
+  renderResult({ random: true, record: false });
+}
+
+function removeDislike(type, id) {
+  if (type === "venue") state.dislikes.venues.delete(id);
+  if (type === "food") state.dislikes.foods.delete(id);
+  persistDislikes();
+  renderGrid();
+  renderDislikes();
+  renderWheel();
+  renderResult({ record: false });
+}
+
+function clearDislikes() {
+  state.dislikes.venues.clear();
+  state.dislikes.foods.clear();
+  persistDislikes();
+  renderGrid();
+  renderDislikes();
+  renderWheel();
+  renderResult({ record: false });
+}
+
+function matchingFamilyFoods(family) {
+  return foods.filter((food) => food.name.includes(family));
+}
+
+function renderBatchDislikeDialog(family) {
+  const matches = matchingFamilyFoods(family);
+  dialogKicker.textContent = "不喜欢建议";
+  dialogShuffleBtn.hidden = true;
+  dialogOkBtn.textContent = "先不处理";
+  dialogContent.innerHTML = `
+    <div class="dialog-food">要不要一起屏蔽「${family}」？</div>
+    <p>发现你可能不想吃「${family}」这一类。下面列出所有包含「${family}」的菜品；确认后只屏蔽这些菜品，所属店铺的其他菜仍会正常推荐。</p>
+    <div class="batch-list">
+      ${matches
+        .map((food) => {
+          const venue = findVenueForFood(food.id);
+          return `
+            <label class="batch-item">
+              <input type="checkbox" value="${food.id}" ${state.dislikes.foods.has(food.id) ? "" : "checked"} />
+              <span>
+                <strong>${food.name}</strong>
+                <small>${venue ? `${venue.name} · ${venueLocation(venue)}` : food.window}</small>
+              </span>
+            </label>
+          `;
+        })
+        .join("")}
+    </div>
+    <button class="primary-action batch-confirm" type="button" data-batch-dislike="${family}">屏蔽选中的菜品</button>
+  `;
+  if (!dialog.open && typeof dialog.showModal === "function") dialog.showModal();
+  else dialog.setAttribute("open", "");
+}
+
+function confirmBatchDislike() {
+  dialogContent.querySelectorAll(".batch-item input:checked").forEach((input) => state.dislikes.foods.add(input.value));
+  persistDislikes();
+  renderGrid();
+  renderDislikes();
+  renderWheel();
+  dialog.close();
+  renderResult({ random: true, record: false });
+}
+
+function renderDislikes() {
+  const venueItems = [...state.dislikes.venues].map((id) => venues.find((venue) => venue.id === id)).filter(Boolean);
+  const foodItems = [...state.dislikes.foods].map((id) => ({ food: findFood(id), venue: findVenueForFood(id) })).filter((item) => item.food);
+  if (!venueItems.length && !foodItems.length) {
+    dislikeList.innerHTML = `<div class="empty">还没有不喜欢项。推荐卡片里点“不喜欢这道”或“不喜欢这家”后，会出现在这里。</div>`;
+    return;
+  }
+  dislikeList.innerHTML = `
+    <div class="dislike-tools">
+      <button class="secondary-action compact-action" type="button" data-clear-dislikes>清空不喜欢列表</button>
+    </div>
+    ${venueItems
+      .map(
+        (venue) => `
+          <article class="dislike-item">
+            <span>店铺</span>
+            <strong>${venue.name}</strong>
+            <small>${venueLocation(venue)}</small>
+            <button class="secondary-action compact-action" type="button" data-remove-dislike-type="venue" data-remove-dislike-id="${venue.id}">恢复推荐</button>
+          </article>
+        `
+      )
+      .join("")}
+    ${foodItems
+      .map(
+        ({ food, venue }) => `
+          <article class="dislike-item">
+            <span>菜品</span>
+            <strong>${food.name}</strong>
+            <small>${venue ? `${venue.name} · ${venueLocation(venue)}` : food.window}</small>
+            <button class="secondary-action compact-action" type="button" data-remove-dislike-type="food" data-remove-dislike-id="${food.id}">恢复推荐</button>
+          </article>
+        `
+      )
+      .join("")}
+  `;
+}
+
 function getWheelVenues() {
   const campus = wheelCampus.value;
-  return venues.filter((venue) => venue.campus === campus);
+  return venues.filter((venue) => venue.campus === campus && !isVenueDisliked(venue) && getAllowedFoods(venue, { ignoreTaste: true }).length);
 }
 
 function wheelGradient(count) {
@@ -725,6 +1096,7 @@ function initWheel() {
       const venue = venues.find((item) => item.id === pickButton.dataset.wheelPick);
       if (!venue) return;
       state.current = makeRecommendation(venue);
+      if (!state.current) return;
       addHistory(state.current);
       renderCurrent(state.current);
       renderStats();
@@ -743,6 +1115,21 @@ function syncFilters() {
   state.campus = $("#campus").value;
   state.area = $("#area").value;
   state.place = $("#place").value;
+}
+
+function routePage() {
+  const pages = ["recommend", "wheel", "library", "profile"];
+  const current = pages.includes(location.hash.replace("#", "")) ? location.hash.replace("#", "") : "recommend";
+  document.querySelectorAll("main > section").forEach((section) => {
+    const page = section.dataset.page || section.id;
+    section.hidden = page !== current;
+  });
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.classList.toggle("active", link.getAttribute("href") === `#${current}`);
+  });
+  if (current === "library") renderGrid();
+  if (current === "profile") renderDislikes();
+  window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0 }));
 }
 
 function pickAiProfile() {
@@ -858,6 +1245,7 @@ backupResults.addEventListener("click", (event) => {
   const venue = venues.find((item) => item.id === button.dataset.pick);
   if (!venue) return;
   state.current = makeRecommendation(venue);
+  if (!state.current) return;
   addHistory(state.current);
   renderCurrent(state.current);
   renderDialog(state.current);
@@ -872,6 +1260,10 @@ mainResult.addEventListener("click", (event) => {
   if (event.target.closest("[data-dish-shuffle]")) {
     if (!state.current) return;
     state.current = makeRecommendation(state.current.venue, { random: true, avoidId: state.current.dish.id });
+    if (!state.current) {
+      renderResult({ random: true, record: false });
+      return;
+    }
     renderCurrent(state.current);
     renderStats();
   }
@@ -880,6 +1272,18 @@ mainResult.addEventListener("click", (event) => {
     const venue = venues.find((item) => item.id === previewButton.dataset.previewMenu);
     if (venue) renderMenuPreview(venue);
   }
+  const dislikeFoodButton = event.target.closest("[data-dislike-food]");
+  if (dislikeFoodButton) dislikeFood(dislikeFoodButton.dataset.dislikeFood);
+  const dislikeVenueButton = event.target.closest("[data-dislike-venue]");
+  if (dislikeVenueButton) dislikeVenue(dislikeVenueButton.dataset.dislikeVenue);
+});
+
+dialogContent.addEventListener("click", (event) => {
+  const dislikeFoodButton = event.target.closest("[data-dislike-food]");
+  if (dislikeFoodButton) dislikeFood(dislikeFoodButton.dataset.dislikeFood);
+  const dislikeVenueButton = event.target.closest("[data-dislike-venue]");
+  if (dislikeVenueButton) dislikeVenue(dislikeVenueButton.dataset.dislikeVenue);
+  if (event.target.closest("[data-batch-dislike]")) confirmBatchDislike();
 });
 
 $("#libraryTabs").addEventListener("click", (event) => {
@@ -896,6 +1300,14 @@ $("#searchInput").addEventListener("input", (event) => {
   renderGrid();
 });
 
+searchAssist.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-suggest-search]");
+  if (!button) return;
+  $("#searchInput").value = button.dataset.suggestSearch;
+  state.search = button.dataset.suggestSearch;
+  renderGrid();
+});
+
 foodGrid.addEventListener("click", (event) => {
   const button = event.target.closest("[data-save]");
   if (button) toggleFavorite(button.dataset.save);
@@ -906,6 +1318,18 @@ foodGrid.addEventListener("click", (event) => {
   }
 });
 
+dislikeList.addEventListener("click", (event) => {
+  if (event.target.closest("[data-clear-dislikes]")) {
+    clearDislikes();
+    return;
+  }
+  const button = event.target.closest("[data-remove-dislike-id]");
+  if (!button) return;
+  removeDislike(button.dataset.removeDislikeType, button.dataset.removeDislikeId);
+});
+
+window.addEventListener("hashchange", routePage);
+
 initSelectors();
 initProfile();
 initWheel();
@@ -913,3 +1337,5 @@ renderCampusMap();
 renderResult({ record: false });
 renderGrid();
 renderStats();
+renderDislikes();
+routePage();

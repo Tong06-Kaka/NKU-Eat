@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>今天南开吃什么</title>
-    <link rel="stylesheet" href="styles.css?v=20260707c" />
+    <link rel="stylesheet" href="styles.css?v=20260708e" />
   </head>
   <body>
     <div class="onboarding" id="onboarding" hidden>
@@ -185,11 +185,6 @@
           <article class="wheel-result" id="wheelResult" aria-live="polite"></article>
         </section>
 
-        <section class="notice-band">
-          <strong>数据说明</strong>
-          <span>当前菜单用于验证推荐流程。真实上线时继续补充每个食堂、店铺、窗口和菜品即可。</span>
-        </section>
-
         <section class="library-section" id="library">
           <div class="section-heading">
             <div>
@@ -203,6 +198,7 @@
               <input id="searchInput" type="search" placeholder="搜索菜名、食堂、窗口、区域" />
             </label>
           </div>
+          <div class="search-assist" id="searchAssist" hidden></div>
           <div class="tabs" id="libraryTabs">
             <button class="active" type="button" data-tab="all">全部</button>
             <button type="button" data-tab="canteen">食堂</button>
@@ -210,8 +206,12 @@
             <button type="button" data-tab="delivery">外卖</button>
             <button type="button" data-tab="favorite">收藏</button>
           </div>
-          <div class="campus-map" id="campusMap"></div>
           <div class="food-grid" id="foodGrid"></div>
+          <div class="campus-map" id="campusMap"></div>
+          <div class="notice-band">
+            <strong>数据说明</strong>
+            <span>当前菜单用于验证推荐流程。真实上线时继续补充每个食堂、店铺、窗口和菜品即可。</span>
+          </div>
         </section>
 
         <section class="profile-section" id="profile">
@@ -239,6 +239,12 @@
             </div>
           </div>
           <div class="history-list" id="historyList"></div>
+          <div class="dislike-manager">
+            <div class="section-kicker">不喜欢管理</div>
+            <h2>以后别再随机到这些</h2>
+            <p>被标记的店铺不会再进入推荐和转盘；被标记的菜品不会再作为该店推荐菜出现，店里的其他菜仍然保留。</p>
+            <div class="dislike-list" id="dislikeList"></div>
+          </div>
         </section>
       </main>
     </div>
@@ -253,6 +259,6 @@
       </div>
     </dialog>
 
-    <script src="app.js?v=20260707c"></script>
+    <script src="app.js?v=20260708e"></script>
   </body>
 </html>

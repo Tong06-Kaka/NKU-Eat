@@ -141,6 +141,15 @@ a {
   color: var(--nankai-dark);
 }
 
+.nav-links a.active {
+  background: var(--nankai);
+  color: #fff;
+}
+
+main > section[hidden] {
+  display: none !important;
+}
+
 .decision-section {
   display: grid;
   grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.98fr);
@@ -828,6 +837,49 @@ svg {
   background: rgba(255, 255, 255, 0.8);
 }
 
+.search-assist {
+  display: grid;
+  gap: 10px;
+  margin: -4px 0 16px;
+  border: 1px solid rgba(11, 107, 87, 0.13);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  padding: 12px 14px;
+  animation: resultIn 0.24s ease;
+}
+
+.search-assist > div:first-child {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--muted);
+}
+
+.search-assist strong {
+  color: var(--nankai);
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.suggestions span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.suggestions button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--nankai);
+  padding: 7px 10px;
+  font-weight: 800;
+}
+
 .food-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -838,7 +890,7 @@ svg {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
-  margin-bottom: 18px;
+  margin-top: 18px;
 }
 
 .map-card {
@@ -875,6 +927,10 @@ svg {
   padding: 18px;
 }
 
+.food-card.search-hit {
+  animation: resultIn 0.24s ease both;
+}
+
 .food-card h3 {
   margin: 0 0 8px;
   font-size: 21px;
@@ -893,6 +949,24 @@ svg {
   justify-content: space-between;
   gap: 10px;
   margin-top: auto;
+}
+
+.match-list {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 12px;
+  border-left: 3px solid rgba(215, 168, 63, 0.68);
+  padding-left: 10px;
+}
+
+.match-list span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.match-list strong {
+  font-size: 14px;
 }
 
 .card-actions {
@@ -915,6 +989,10 @@ svg {
 .ghost-button.active {
   border-color: rgba(211, 79, 47, 0.34);
   background: var(--rose);
+  color: #9d321e;
+}
+
+.danger-action {
   color: #9d321e;
 }
 
@@ -993,6 +1071,53 @@ svg {
   font-size: 13px;
 }
 
+.dislike-manager {
+  margin-top: 18px;
+  border: 1px solid rgba(11, 107, 87, 0.13);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 22px;
+}
+
+.dislike-manager p {
+  max-width: 780px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.dislike-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.dislike-tools {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dislike-item {
+  display: grid;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+}
+
+.dislike-item span {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.dislike-item small {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .empty {
   grid-column: 1 / -1;
   border: 1px dashed var(--line);
@@ -1047,6 +1172,44 @@ svg {
   justify-content: flex-end;
   gap: 10px;
   margin-top: 22px;
+}
+
+.dialog-extra-actions {
+  margin-top: 14px;
+}
+
+.batch-list {
+  display: grid;
+  max-height: 320px;
+  overflow: auto;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.batch-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px 12px;
+}
+
+.batch-item span {
+  display: grid;
+  gap: 3px;
+}
+
+.batch-item small {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.batch-confirm {
+  width: 100%;
+  margin-top: 14px;
 }
 
 .menu-preview-list {
@@ -1281,6 +1444,7 @@ svg {
   .decision-section,
   .food-grid,
   .campus-map,
+  .dislike-list,
   .wheel-section {
     grid-template-columns: 1fr;
   }
