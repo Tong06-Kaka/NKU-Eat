@@ -239,6 +239,23 @@ const wheelState = {
   rotation: 0,
   currentVenue: null
 };
+let pendingAvatarImage = state.profile?.avatarImage || "";
+
+function animateDialogContent() {
+  dialog.classList.remove("is-refreshing");
+  dialog.offsetWidth;
+  dialog.classList.add("is-refreshing");
+  window.setTimeout(() => dialog.classList.remove("is-refreshing"), 380);
+}
+
+function closeDecisionDialog() {
+  if (!dialog.open || dialog.classList.contains("is-closing")) return;
+  dialog.classList.add("is-closing");
+  window.setTimeout(() => {
+    dialog.close();
+    dialog.classList.remove("is-closing");
+  }, 190);
+}
 
 function group(source, place, window, itemText, area = "理科组团") {
   return {
@@ -617,6 +634,7 @@ function renderDialog(recommendation) {
       <button class="secondary-action compact-action danger-action" type="button" data-dislike-venue="${venue.id}">不喜欢这家</button>
     </div>
   `;
+  animateDialogContent();
   if (dialog.open) return;
   if (typeof dialog.showModal === "function") dialog.showModal();
   else dialog.setAttribute("open", "");
@@ -643,6 +661,7 @@ function renderMenuPreview(venue) {
     <p>${venue.foods.length === 1 && venue.foods[0].placeholder ? "这家目前按店铺收录，适合到店后看现场菜单或自选。" : `已收录 ${venue.foods.length} 个可选菜品。`}</p>
     <ul class="menu-preview-list">${menuItems}</ul>
   `;
+  animateDialogContent();
   if (dialog.open) return;
   if (typeof dialog.showModal === "function") dialog.showModal();
   else dialog.setAttribute("open", "");
@@ -947,7 +966,7 @@ function dislikeFood(foodId, { offerBatch = true } = {}) {
     renderBatchDislikeDialog(family);
     return;
   }
-  if (dialog.open) dialog.close();
+  if (dialog.open) closeDecisionDialog();
   renderResult({ random: true, record: false });
 }
 
@@ -959,7 +978,7 @@ function dislikeVenue(venueId) {
   renderGrid();
   renderDislikes();
   renderWheel();
-  if (dialog.open) dialog.close();
+  if (dialog.open) closeDecisionDialog();
   renderResult({ random: true, record: false });
 }
 
@@ -1013,6 +1032,7 @@ function renderBatchDislikeDialog(family) {
     </div>
     <button class="primary-action batch-confirm" type="button" data-batch-dislike="${family}">屏蔽选中的菜品</button>
   `;
+  animateDialogContent();
   if (!dialog.open && typeof dialog.showModal === "function") dialog.showModal();
   else dialog.setAttribute("open", "");
 }
@@ -1023,7 +1043,7 @@ function confirmBatchDislike() {
   renderGrid();
   renderDislikes();
   renderWheel();
-  dialog.close();
+  closeDecisionDialog();
   renderResult({ random: true, record: false });
 }
 
@@ -1071,10 +1091,10 @@ function getWheelVenues() {
 }
 
 function wheelGradient(count) {
-  const palette = ["#075a4a", "#d7a83f", "#c9472d", "#8fb6a7", "#113f38", "#e4c874"];
-  const safeCount = Math.max(count, 1);
-  const step = 100 / safeCount;
-  return `conic-gradient(${Array.from({ length: safeCount })
+  const palette = ["#4b1553", "#a35a91", "#3d746f", "#d3ad64", "#6f1d72", "#d7bfdc", "#5f8f8b", "#35103f"];
+  const segmentCount = count ? 12 : 8;
+  const step = 100 / segmentCount;
+  return `conic-gradient(from -15deg, ${Array.from({ length: segmentCount })
     .map((_, index) => `${palette[index % palette.length]} ${index * step}% ${(index + 1) * step}%`)
     .join(", ")})`;
 }
@@ -1094,6 +1114,19 @@ function renderWheel() {
   const pool = getWheelVenues();
   wheelPoolCount.textContent = `${pool.length} 家可选`;
   wheelDisc.style.setProperty("--wheel-gradient", wheelGradient(pool.length));
+  wheelLabels.classList.remove("is-visible");
+  wheelLabels.innerHTML = "";
+  wheelState.currentVenue = null;
+  spinWheelBtn.textContent = "开始转";
+  wheelResult.classList.remove("is-hit");
+  wheelResult.innerHTML = `
+    <div class="section-kicker">${wheelCampus.value}</div>
+    <h3>等一声开饭令</h3>
+    <p>这一轮会从当前校区的所有商家和食堂窗口里抽一家。</p>
+  `;
+}
+
+function showWheelLabels(pool) {
   const labelPool = sampleWheelLabels(pool);
   wheelLabels.innerHTML = labelPool
     .map((venue, index) => {
@@ -1101,12 +1134,7 @@ function renderWheel() {
       return `<span class="wheel-label" style="--angle:${angle}">${compactWheelLabel(venue.name)}</span>`;
     })
     .join("");
-  wheelResult.classList.remove("is-hit");
-  wheelResult.innerHTML = `
-    <div class="section-kicker">${wheelCampus.value}</div>
-    <h3>等一声开饭令</h3>
-    <p>这一轮会从当前校区的所有商家和食堂窗口里抽一家。</p>
-  `;
+  wheelLabels.classList.add("is-visible");
 }
 
 function renderWheelResult(venue) {
@@ -1136,14 +1164,21 @@ function spinWheel() {
   const segment = 360 / pool.length;
   const target = 360 - index * segment - segment / 2;
   wheelState.rotation += 1440 + target + Math.random() * Math.min(segment * 0.5, 12);
+  showWheelLabels(pool);
   spinWheelBtn.disabled = true;
+  wheelCampus.disabled = true;
   spinWheelBtn.textContent = "转动中";
   wheelDisc.classList.add("is-spinning");
   wheelDisc.style.transform = `rotate(${wheelState.rotation}deg)`;
   window.setTimeout(() => {
     spinWheelBtn.disabled = false;
+    wheelCampus.disabled = false;
     spinWheelBtn.textContent = "再转一次";
     wheelDisc.classList.remove("is-spinning");
+    wheelLabels.classList.remove("is-visible");
+    window.setTimeout(() => {
+      if (!wheelLabels.classList.contains("is-visible")) wheelLabels.innerHTML = "";
+    }, 320);
     renderWheelResult(venue);
   }, 4200);
 }
@@ -1203,15 +1238,66 @@ function pickAiProfile() {
   selectAvatar(avatar);
 }
 
+function paintAvatar(element, avatar, image = "") {
+  element.textContent = image ? "" : avatar;
+  element.style.backgroundImage = image ? `url("${image}")` : "";
+}
+
 function selectAvatar(avatar) {
-  $("#avatarPreview").textContent = avatar;
+  pendingAvatarImage = "";
+  paintAvatar($("#avatarPreview"), avatar);
   document.querySelectorAll("[data-avatar]").forEach((button) => button.classList.toggle("active", button.dataset.avatar === avatar));
+}
+
+function selectAvatarImage(image) {
+  pendingAvatarImage = image;
+  paintAvatar($("#avatarPreview"), state.profile?.avatar || "南", image);
+  document.querySelectorAll("[data-avatar]").forEach((button) => button.classList.remove("active"));
+}
+
+function resizeAvatar(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      const image = new Image();
+      image.onerror = reject;
+      image.onload = () => {
+        const size = 192;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext("2d");
+        const sourceSize = Math.min(image.naturalWidth, image.naturalHeight);
+        const sourceX = (image.naturalWidth - sourceSize) / 2;
+        const sourceY = (image.naturalHeight - sourceSize) / 2;
+        context.drawImage(image, sourceX, sourceY, sourceSize, sourceSize, 0, 0, size, size);
+        resolve(canvas.toDataURL("image/jpeg", 0.82));
+      };
+      image.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleAvatarUpload(event) {
+  const [file] = event.target.files;
+  if (!file) return;
+  if (!file.type.startsWith("image/")) return;
+  const uploadLabel = document.querySelector(".upload-avatar");
+  uploadLabel.classList.add("is-loading");
+  try {
+    selectAvatarImage(await resizeAvatar(file));
+  } finally {
+    uploadLabel.classList.remove("is-loading");
+    event.target.value = "";
+  }
 }
 
 function saveProfile() {
   const name = $("#nicknameInput").value.trim() || "南开同学";
   const avatar = $("#avatarPreview").textContent || "南";
-  state.profile = { name, avatar };
+  state.profile = { name, avatar, avatarImage: pendingAvatarImage };
   localStorage.setItem("nkuProfile", JSON.stringify(state.profile));
   applyProfile();
   $("#onboarding").hidden = true;
@@ -1221,18 +1307,20 @@ function applyProfile() {
   const profile = state.profile || { name: "南开同学", avatar: "南" };
   $("#userGreeting").textContent = `${profile.name}，今天吃点什么`;
   $("#profileName").textContent = profile.name;
-  $("#profileAvatar").textContent = profile.avatar;
+  paintAvatar($("#profileAvatar"), profile.avatar, profile.avatarImage);
 }
 
 function initProfile() {
   $("#avatarGrid").innerHTML = avatars.map((avatar) => `<button type="button" data-avatar="${avatar}">${avatar}</button>`).join("");
-  selectAvatar(state.profile?.avatar || "南");
+  if (state.profile?.avatarImage) selectAvatarImage(state.profile.avatarImage);
+  else selectAvatar(state.profile?.avatar || "南");
   $("#nicknameInput").value = state.profile?.name || "";
   $("#avatarGrid").addEventListener("click", (event) => {
     const button = event.target.closest("[data-avatar]");
     if (button) selectAvatar(button.dataset.avatar);
   });
   $("#aiProfileBtn").addEventListener("click", pickAiProfile);
+  $("#avatarUpload").addEventListener("change", handleAvatarUpload);
   $("#enterBtn").addEventListener("click", saveProfile);
   $("#editProfileBtn").addEventListener("click", openProfileEditor);
   $("#cancelProfileBtn").addEventListener("click", closeProfileEditor);
@@ -1247,12 +1335,90 @@ function openProfileEditor({ initial = false } = {}) {
   $("#enterBtn").textContent = initial ? "进入网站" : "保存档案";
   $("#cancelProfileBtn").hidden = initial;
   $("#nicknameInput").value = state.profile?.name || "";
-  selectAvatar(state.profile?.avatar || "南");
+  if (state.profile?.avatarImage) selectAvatarImage(state.profile.avatarImage);
+  else selectAvatar(state.profile?.avatar || "南");
   $("#onboarding").hidden = false;
 }
 
 function closeProfileEditor() {
   $("#onboarding").hidden = true;
+}
+
+function initAmbientParticles() {
+  const canvas = $("#ambientParticles");
+  if (!canvas || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const context = canvas.getContext("2d");
+  const colors = ["111,29,114", "154,63,128", "61,116,111", "209,174,104"];
+  let width = 0;
+  let height = 0;
+  let particles = [];
+  let pointer = { x: -1000, y: -1000 };
+
+  function createParticle() {
+    return {
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: 0.7 + Math.random() * 1.8,
+      vx: (Math.random() - 0.5) * 0.16,
+      vy: -0.08 - Math.random() * 0.22,
+      alpha: 0.12 + Math.random() * 0.3,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    };
+  }
+
+  function resize() {
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.round(width * ratio);
+    canvas.height = Math.round(height * ratio);
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const count = Math.min(42, Math.max(22, Math.round((width * height) / 36000)));
+    particles = Array.from({ length: count }, createParticle);
+  }
+
+  function draw() {
+    context.clearRect(0, 0, width, height);
+    particles.forEach((particle, index) => {
+      const dx = particle.x - pointer.x;
+      const dy = particle.y - pointer.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance < 90 && distance > 0) {
+        particle.x += (dx / distance) * 0.3;
+        particle.y += (dy / distance) * 0.3;
+      }
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      if (particle.y < -8) particle.y = height + 8;
+      if (particle.x < -8) particle.x = width + 8;
+      if (particle.x > width + 8) particle.x = -8;
+      context.beginPath();
+      context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      context.fillStyle = `rgba(${particle.color},${particle.alpha})`;
+      context.fill();
+
+      particles.slice(index + 1).forEach((other) => {
+        const gap = Math.hypot(particle.x - other.x, particle.y - other.y);
+        if (gap > 88) return;
+        context.beginPath();
+        context.moveTo(particle.x, particle.y);
+        context.lineTo(other.x, other.y);
+        context.strokeStyle = `rgba(111,29,114,${(1 - gap / 88) * 0.045})`;
+        context.stroke();
+      });
+    });
+    window.requestAnimationFrame(draw);
+  }
+
+  window.addEventListener("resize", resize, { passive: true });
+  window.addEventListener("pointermove", (event) => {
+    pointer = { x: event.clientX, y: event.clientY };
+  }, { passive: true });
+  window.addEventListener("pointerleave", () => {
+    pointer = { x: -1000, y: -1000 };
+  });
+  resize();
+  draw();
 }
 
 document.querySelectorAll("[data-filter='source'] button").forEach((button) => {
@@ -1300,8 +1466,15 @@ document.querySelectorAll("#tasteChips button").forEach((button) => {
 
 $("#randomBtn").addEventListener("click", () => renderResult({ random: true, popup: true }));
 dialogShuffleBtn.addEventListener("click", () => renderResult({ random: true, popup: true }));
-dialogOkBtn.addEventListener("click", () => dialog.close());
-$("#closeDialog").addEventListener("click", () => dialog.close());
+dialogOkBtn.addEventListener("click", closeDecisionDialog);
+$("#closeDialog").addEventListener("click", closeDecisionDialog);
+dialog.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeDecisionDialog();
+});
+$("#nicknameInput").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") saveProfile();
+});
 
 backupResults.addEventListener("click", (event) => {
   const button = event.target.closest("[data-pick]");
@@ -1397,6 +1570,7 @@ window.addEventListener("hashchange", routePage);
 initSelectors();
 initProfile();
 initWheel();
+initAmbientParticles();
 renderCampusMap();
 renderResult({ record: false });
 renderGrid();

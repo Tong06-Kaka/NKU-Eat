@@ -4,26 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>今天南开吃什么</title>
-    <link rel="stylesheet" href="styles.css?v=20260710a" />
+    <link rel="stylesheet" href="styles.css?v=20260711a" />
   </head>
   <body>
+    <canvas class="ambient-particles" id="ambientParticles" aria-hidden="true"></canvas>
     <div class="onboarding" id="onboarding" hidden>
       <section class="login-card" aria-labelledby="loginTitle">
-        <div class="avatar-preview" id="avatarPreview">南</div>
-        <div>
-          <div class="section-kicker" id="profileFormKicker">第一次见面</div>
-          <h1 id="loginTitle">先给你的饭点档案起个名</h1>
-          <p class="intro" id="profileFormIntro">昵称和头像只保存在当前浏览器，用来让推荐结果更有个人感。</p>
+        <div class="login-visual" aria-hidden="true">
+          <img src="assets/nankai-motto.jpg" alt="" />
+          <div class="login-visual-copy">
+            <span>南开 · 1919</span>
+            <strong>允公允能<br />日新月异</strong>
+          </div>
         </div>
-        <label>
-          昵称
-          <input id="nicknameInput" maxlength="16" placeholder="例如：南开干饭研究员" />
-        </label>
-        <div class="avatar-grid" id="avatarGrid" aria-label="头像选择"></div>
-        <div class="action-row">
-          <button class="secondary-action" type="button" id="aiProfileBtn">AI 给我想一个</button>
-          <button class="secondary-action" type="button" id="cancelProfileBtn" hidden>取消</button>
-          <button class="primary-action" type="button" id="enterBtn">进入网站</button>
+        <div class="login-form">
+          <div class="profile-intro-row">
+            <div class="avatar-preview" id="avatarPreview">南</div>
+            <div>
+              <div class="section-kicker" id="profileFormKicker">第一次见面</div>
+              <h1 id="loginTitle">先给你的饭点档案起个名</h1>
+            </div>
+          </div>
+          <p class="intro" id="profileFormIntro">昵称和头像只保存在当前浏览器，用来让推荐结果更有个人感。</p>
+          <label>
+            昵称
+            <input id="nicknameInput" maxlength="16" placeholder="例如：南开干饭研究员" />
+          </label>
+          <div class="avatar-picker-heading">
+            <span>头像</span>
+            <label class="upload-avatar" for="avatarUpload">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5M5 14v5h14v-5" /></svg>
+              上传照片
+            </label>
+            <input id="avatarUpload" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+          </div>
+          <div class="avatar-grid" id="avatarGrid" aria-label="头像选择"></div>
+          <div class="action-row">
+            <button class="secondary-action" type="button" id="aiProfileBtn">帮我想一个昵称</button>
+            <button class="secondary-action" type="button" id="cancelProfileBtn" hidden>取消</button>
+            <button class="primary-action" type="button" id="enterBtn">进入网站</button>
+          </div>
         </div>
       </section>
     </div>
@@ -31,7 +51,7 @@
     <div class="app-shell">
       <header class="topbar">
         <a class="brand" href="#recommend">
-          <span class="brand-mark" aria-hidden="true">NK</span>
+          <span class="brand-mark" aria-hidden="true"><img src="assets/nankai-seal.jpg" alt="" /></span>
           <span>
             <strong>今天南开吃什么</strong>
             <small id="userGreeting">30 秒选餐助手</small>
@@ -54,22 +74,9 @@
               先选校区、组团和食堂/店铺，再用种类、口味和需求标签缩小范围。推荐会先告诉你去哪家，再给出这家的可选菜品。
             </p>
             <div class="campus-scene" aria-hidden="true">
-              <div class="nankai-seal">
-                <span>NKU</span>
-                <small>1919</small>
-              </div>
-              <div class="campus-skyline">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="hungry-guide">
-                <span class="guide-bubble">饿呀</span>
-                <span class="guide-face">
-                  <i></i>
-                  <i></i>
-                  <b></b>
-                </span>
+              <div class="campus-photo-copy">
+                <span>南开园 · 饭点灵感</span>
+                <strong>允公允能，日新月异</strong>
               </div>
             </div>
 
@@ -151,7 +158,10 @@
           </div>
 
           <aside class="result-panel" aria-live="polite">
-            <img class="food-visual" src="assets/nankai-food-map.svg" alt="南开校园选餐插画" />
+            <figure class="food-visual">
+              <img src="assets/nankai-library.jpg" alt="夕阳下的南开校园建筑" />
+              <figcaption>渤海之滨 · 白河之津</figcaption>
+            </figure>
             <div class="result-header">
               <span id="resultMode">当前推荐</span>
               <button class="ghost-button" type="button" id="saveBtn">收藏</button>
@@ -178,8 +188,8 @@
           <div class="wheel-stage">
             <div class="wheel-pointer" aria-hidden="true"></div>
             <div class="wheel-disc" id="wheelDisc">
-              <div class="wheel-labels" id="wheelLabels"></div>
-              <div class="wheel-center">NKU</div>
+              <div class="wheel-labels" id="wheelLabels" aria-hidden="true"></div>
+              <div class="wheel-center"><span>南开</span><small>1919</small></div>
             </div>
           </div>
           <article class="wheel-result" id="wheelResult" aria-live="polite"></article>
@@ -198,6 +208,16 @@
               <input id="searchInput" type="search" placeholder="搜索菜名、食堂、窗口、区域" />
             </label>
           </div>
+          <div class="campus-photo-ribbon" aria-label="南开校园影像">
+            <figure class="campus-photo campus-photo-wide">
+              <img src="assets/nankai-sunset.jpg" alt="夕阳中的南开校园" />
+              <figcaption>日新月异</figcaption>
+            </figure>
+            <figure class="campus-photo">
+              <img src="assets/nankai-statue.jpg" alt="夜色中的周恩来总理像" />
+              <figcaption>允公允能</figcaption>
+            </figure>
+          </div>
           <div class="search-assist" id="searchAssist" hidden></div>
           <div class="tabs" id="libraryTabs">
             <button class="active" type="button" data-tab="all">全部</button>
@@ -215,6 +235,10 @@
         </section>
 
         <section class="profile-section" id="profile">
+          <div class="profile-photo-band" aria-hidden="true">
+            <img src="assets/nankai-window.jpg" alt="" />
+            <p><span>巍巍我南开精神</span><strong>把每一次选择，留成南开园里的饭点记忆。</strong></p>
+          </div>
           <div class="preference-card">
             <div class="profile-line">
               <span class="small-avatar" id="profileAvatar">南</span>
@@ -247,6 +271,10 @@
           </div>
         </section>
       </main>
+      <footer class="site-footer">
+        <span>允公允能 · 日新月异</span>
+        <span>今天南开吃什么 · NKU Food Compass</span>
+      </footer>
     </div>
 
     <dialog class="decision-dialog" id="decisionDialog">
@@ -259,6 +287,6 @@
       </div>
     </dialog>
 
-    <script src="app.js?v=20260710a"></script>
+    <script src="app.js?v=20260711a"></script>
   </body>
 </html>
